@@ -1,0 +1,74 @@
+package com.soriani.securewebapp.dao.categorie;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.soriani.securewebapp.business.Categoria;
+import com.soriani.securewebapp.business.GRPCategoria;
+import com.soriani.securewebapp.dao.condivisi.Dao;
+import com.soriani.securewebapp.utility.ApplicationException;
+
+public class CategorieDao extends Dao implements CategorieDaoQuery {
+	
+	/**
+	 * costante per connetersi al db 
+	 */
+	private static final String TABLE = "categorie";
+	
+	private static CategorieDao categorieDao;
+	
+	public static CategorieDao getCategorieDao() {
+		if(categorieDao == null) {
+			categorieDao = new CategorieDao();
+		}
+		return categorieDao;
+	}
+	
+	public CategorieDao() {
+		
+	}
+	
+	/**
+	 * metodo che restituisce tutte le categorie inserite a db
+	 * @return
+	 * @throws ApplicationException
+	 * @throws SQLException
+	 */
+	public GRPCategoria getGRPCategorie() throws ApplicationException, SQLException {
+		
+		Connection connection = null;
+		ResultSet resultSet = null;
+		PreparedStatement ps = null;
+		
+		try {
+			
+			connection = getConnection(TABLE, SELECT);
+			String statement = readGRPCategorieStatement;
+			ps = connection.prepareStatement(statement);
+			resultSet = ps.executeQuery();
+			if(!resultSet.next()) {
+				throw new ApplicationException("Categorie non disponibili");
+			}
+			
+			GRPCategoria grpCategorie = new GRPCategoria();
+			do {
+				Categoria categoria = new Categoria();
+				categoria.setCodice(resultSet.getInt("CODICE"));
+				categoria.setDescrizione(resultSet.getString("DESCRIZIONE"));
+				grpCategorie.add(categoria);
+			}while(resultSet.next());
+			
+			return grpCategorie;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			closeConnection(resultSet, ps, connection);
+		}
+		
+	}
+
+}
