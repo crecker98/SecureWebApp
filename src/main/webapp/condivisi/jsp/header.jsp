@@ -2,7 +2,6 @@
 <%@ page import="com.soriani.securewebapp.web.sessione.GestoreSessione" %>
 <%@ page import="com.soriani.securewebapp.business.Utente" %>
 <%@ page import="java.util.Base64" %>
-<%@ page import="java.util.Base64.Decoder" %>
 
 <%@ include file="/condivisi/jsp/tagSup.jsp" %> 
 
@@ -25,13 +24,13 @@ Utente utente = GestoreSessione.getUtenteLoggato(request);
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
+                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-lock"></i></div>
                     <div class="sidebar-brand-text mx-3"><span>SecureWebApp</span></div>
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link <%= request.getRequestURI().contains("home") ? "active" : "" %>" href="Home"><i class="fas fa-table"></i><span>Progetti</span></a></li>
-                    <li class="nav-item"><a class="nav-link <%= request.getRequestURI().contains("uploadProposta") ? "active" : "" %>" href="UploadProposta"><i class="fas fa-upload"></i><span>Carica</span></a></li>
+                    <li class="nav-item"><a class="nav-link <%= request.getRequestURI().contains("uploadProposta") ? "active" : "" %>" href="UploadProposta"><i class="fas fa-upload"></i><span>Carica Proposta</span></a></li>
                     <li class="nav-item"><a class="nav-link <%= request.getRequestURI().contains("profilo") ? "active" : "" %>" href="Profilo"><i class="fas fa-user"></i><span>Profilo</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="Login?operazione=Logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
                 </ul>

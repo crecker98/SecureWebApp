@@ -46,13 +46,9 @@ public class HomeServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String operazione = request.getParameter("operazione");
-		if(operazione != null) {
-			
-		}else {
-			mainPage(request, response);
-		}
+
+		HomeServletHelper.getInstance().readAllProposte(request);
+		mainPage(request, response);
 		
 	}
 	

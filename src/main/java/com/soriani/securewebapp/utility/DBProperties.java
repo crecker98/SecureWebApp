@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-public class DBProperties implements Serializable {
+public final class DBProperties implements Serializable {
 	
 	/**
 	 * 

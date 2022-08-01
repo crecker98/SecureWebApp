@@ -2,7 +2,7 @@ package com.soriani.securewebapp.business;
 
 import java.io.Serializable;
 
-public class Utente implements Serializable {
+public final class Utente implements Serializable {
 	
 	/**
 	 * 

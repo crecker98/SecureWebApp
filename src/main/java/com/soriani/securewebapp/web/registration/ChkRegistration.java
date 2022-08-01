@@ -3,6 +3,7 @@ package com.soriani.securewebapp.web.registration;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,11 @@ import com.soriani.securewebapp.utility.Servizi;
 
 
 public class ChkRegistration {
+
+	//COSTANTI PER GESTIRE I TIPI DI FILE DA CARICARE
+	private static final String JPEG_EXTENSION = "image/jpeg";
+	private static final String PNG_EXTENSION = "image/png";
+	private static final String JPG_EXTENSION = "image/jpg";
 	
 	private static ChkRegistration instance = new ChkRegistration();
 	
@@ -88,24 +94,19 @@ public class ChkRegistration {
 		}
 		
 		if(filePart.getSize() > 0) {
-			
-			String esitoImmagine;
+
+			ArrayList<String> contentTypes = new ArrayList<>();
+			contentTypes.add(JPEG_EXTENSION);
+			contentTypes.add(PNG_EXTENSION);
+			contentTypes.add(JPG_EXTENSION);
 			try {
-				esitoImmagine = Controllore.checkImmagineDelProfilo(filePart.getInputStream());
+				Controllore.checkFile(filePart, contentTypes);
 				utente.setImmagineProfilo(Servizi.readAllBytes(filePart.getInputStream()));
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new ApplicationException("Impossibile elaborare il file!");
-			} catch (SAXException e) {
-				e.printStackTrace();
-				throw new ApplicationException("Impossibile elaborare il file!");
-			} catch (TikaException e) {
-				e.printStackTrace();
-				throw new ApplicationException("Impossibile elaborare il file!");
-			}
-			
-			if(esitoImmagine != null) {
-				throw new ApplicationException(esitoImmagine);
+			} catch (ApplicationException e1){
+				throw e1;
 			}
 			
 		}else {

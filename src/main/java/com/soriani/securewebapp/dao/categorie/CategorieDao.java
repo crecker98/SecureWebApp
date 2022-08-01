@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.soriani.securewebapp.business.Categoria;
-import com.soriani.securewebapp.business.GRPCategoria;
 import com.soriani.securewebapp.dao.condivisi.Dao;
 import com.soriani.securewebapp.utility.ApplicationException;
 
@@ -36,7 +36,7 @@ public class CategorieDao extends Dao implements CategorieDaoQuery {
 	 * @throws ApplicationException
 	 * @throws SQLException
 	 */
-	public GRPCategoria getGRPCategorie() throws ApplicationException, SQLException {
+	public ArrayList<Categoria> getCategorie() throws ApplicationException, SQLException {
 		
 		Connection connection = null;
 		ResultSet resultSet = null;
@@ -51,16 +51,16 @@ public class CategorieDao extends Dao implements CategorieDaoQuery {
 			if(!resultSet.next()) {
 				throw new ApplicationException("Categorie non disponibili");
 			}
-			
-			GRPCategoria grpCategorie = new GRPCategoria();
+
+			ArrayList<Categoria> categorie = new ArrayList<Categoria>();
 			do {
 				Categoria categoria = new Categoria();
 				categoria.setCodice(resultSet.getInt("CODICE"));
 				categoria.setDescrizione(resultSet.getString("DESCRIZIONE"));
-				grpCategorie.add(categoria);
+				categorie.add(categoria);
 			}while(resultSet.next());
 			
-			return grpCategorie;
+			return categorie;
 			
 		} catch(SQLException e) {
 			e.printStackTrace();

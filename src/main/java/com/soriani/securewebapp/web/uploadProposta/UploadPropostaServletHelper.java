@@ -1,11 +1,12 @@
 package com.soriani.securewebapp.web.uploadProposta;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.soriani.securewebapp.business.GRPCategoria;
+import com.soriani.securewebapp.business.Categoria;
 import com.soriani.securewebapp.business.PropostaProgettuale;
 import com.soriani.securewebapp.dao.categorie.CategorieDao;
 import com.soriani.securewebapp.dao.proposte.ProposteProgettualiDao;
@@ -31,8 +32,8 @@ public class UploadPropostaServletHelper {
 	public void setCategorieSessione(HttpServletRequest request) throws ApplicationException {
 		
 		try {
-			GRPCategoria categorie = CategorieDao.getCategorieDao().getGRPCategorie();
-			GestoreSessioneUploadProposta.setGRPCategorie(request, categorie);
+			ArrayList<Categoria> categorie = CategorieDao.getCategorieDao().getCategorie();
+			GestoreSessioneUploadProposta.setCategorie(request, categorie);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			throw e;
@@ -74,7 +75,10 @@ public class UploadPropostaServletHelper {
 			e.printStackTrace();
 			throw new ApplicationException("Errore in fase di inserimento");
 		}
-		
+
+		GestoreSessioneUploadProposta.setPropostaCaricata(request, true);
+		GestoreSessioneUploadProposta.setFormUpload(request, new HashMap<String, String>());
+
 	}
 
 }

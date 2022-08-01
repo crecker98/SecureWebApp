@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-public class Servizi {
+public final class Servizi {
 
 	/**
 	 * metodo che permette di unire due array di byte

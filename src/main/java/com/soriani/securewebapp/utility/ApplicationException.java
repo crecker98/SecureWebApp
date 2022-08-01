@@ -7,7 +7,7 @@ package com.soriani.securewebapp.utility;
  * @author christiansoriani
  *
  */
-public class ApplicationException extends Exception {
+public final class ApplicationException extends Exception {
 
 	/**
 	 * 

@@ -34,7 +34,31 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 	 * costrutture
 	 */
 	public UtentiDao() {
-		
+
+	}
+
+	public void updatePhoto(byte[] newPhoto, String username) throws ApplicationException, SQLException {
+
+		Connection connection = null;
+		ResultSet resultSet = null;
+		PreparedStatement ps = null;
+
+		try {
+
+			connection = getConnection(TABLE, UPDATE);
+			ps = connection.prepareStatement(updatePhotoFromUsernameStatement);
+			int i = 1;
+			ps.setBytes(i++, newPhoto);
+			ps.setString(i, username);
+			ps.executeUpdate();
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			closeConnection(resultSet, ps, connection);
+		}
+
 	}
 	
 	/**
@@ -53,8 +77,7 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 		try {
 			
 			connection = getConnection(TABLE, SELECT);
-			String statement = readUtenteFromUsernameStatement;
-			ps = connection.prepareStatement(statement);
+			ps = connection.prepareStatement(readUtenteFromUsernameStatement);
 			ps.setString(1, username);
 			resultSet = ps.executeQuery();
 			boolean trovato = resultSet.next();
@@ -72,7 +95,6 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 	/**
 	 * metodo che provvede a registrare l'utente
 	 * @param utente
-	 * @param password
 	 * @return
 	 * @throws ApplicationException
 	 * @throws SQLException
@@ -87,14 +109,13 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 		try {
 			
 			connection = getConnection(TABLE, INSERT);
-			String statement = insertUtenteStatement;
-			ps = connection.prepareStatement(statement);
+			ps = connection.prepareStatement(insertUtenteStatement);
 			int i = 1;
 			ps.setString(i++, utente.getNome());
 			ps.setString(i++, utente.getCognome());
 			ps.setString(i++, utente.getUsername());
 			ps.setBytes(i++, utente.getImmagineProfilo());
-			ps.setBytes(i++, Servizi.readBytes("password" + utente.getUsername() + ".bin"));
+			ps.setBytes(i, Servizi.readBytes("password" + utente.getUsername() + ".bin"));
 			Servizi.deleteFile("password" + utente.getUsername() + ".bin");
 			ps.executeUpdate();
 			
@@ -187,10 +208,7 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 		}finally {
 			closeConnection(resultSet, ps, connection);
 		}
-		
-		
-		
-		
+
 	}
 	
 }

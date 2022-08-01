@@ -10,7 +10,7 @@ public class GestoreSessione {
 		return (String) request.getSession().getAttribute("MessaggioErrore");
 	}
 	
-	public static final void setMessaggioErrore(HttpServletRequest request, String messaggioErrore) {
+	public static void setMessaggioErrore(HttpServletRequest request, String messaggioErrore) {
 		request.getSession().setAttribute("MessaggioErrore", messaggioErrore);
 	}
 	
@@ -18,7 +18,7 @@ public class GestoreSessione {
 		return (String) request.getSession().getAttribute("CasoDUso");
 	}
 	
-	public static final void setCasoDUso(HttpServletRequest request, String casoDUso) {
+	public static  void setCasoDUso(HttpServletRequest request, String casoDUso) {
 		request.getSession().setAttribute("CasoDUso", casoDUso);
 	}
 	
@@ -26,7 +26,7 @@ public class GestoreSessione {
 		return (Utente) request.getSession().getAttribute("UtenteLoggato");
 	}
 	
-	public static final void setUtenteLoggato(HttpServletRequest request, Utente utente) {
+	public static void setUtenteLoggato(HttpServletRequest request, Utente utente) {
 		request.getSession().setAttribute("UtenteLoggato", utente);
 	}
 

@@ -2,7 +2,7 @@ package com.soriani.securewebapp.business;
 
 import java.io.Serializable;
 
-public class PropostaProgettuale implements Serializable{
+public final class PropostaProgettuale implements Serializable{
 
 	/**
 	 * 
@@ -10,7 +10,10 @@ public class PropostaProgettuale implements Serializable{
 	private static final long serialVersionUID = -2094568555308107344L;
 	
 	private int codice;
-	private int codCategoria;
+	private Categoria categoria;
+
+	private Utente utente;
+
 	private String nome;
 	private String descrizione;
 	private String dataAggiungta;
@@ -22,12 +25,23 @@ public class PropostaProgettuale implements Serializable{
 	public void setCodice(int codice) {
 		this.codice = codice;
 	}
-	public int getCodCategoria() {
-		return codCategoria;
+
+	public Categoria getCategoria() {
+		return categoria;
 	}
-	public void setCodCategoria(int codCategoria) {
-		this.codCategoria = codCategoria;
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
+
+	public Utente getUtente() {
+		return utente;
+	}
+
+	public void setUtente(Utente utente) {
+		this.utente = utente;
+	}
+
 	public String getNome() {
 		return nome;
 	}

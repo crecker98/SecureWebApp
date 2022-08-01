@@ -30,8 +30,7 @@ public class UploadPropostaServlet extends HttpServlet {
      * costante per il percorso dell'upload proposta 
      */
     private static final String PAGE_UPLOAD_PROPOSTA = "/uploadProposta/jsp/uploadProposta.jsp";
-       
-    private static final String PAGE_SUCCESS_UPLOAD = "/uploadProposta/jsp/success.jsp";
+
     
     /**
      * @see HttpServlet#HttpServlet()
@@ -61,15 +60,14 @@ public class UploadPropostaServlet extends HttpServlet {
 					
 					UploadPropostaServletHelper.getInstance().setFormSessione(request);
 					UploadPropostaServletHelper.getInstance().insertPropostaProgettuale(request);
-					response.sendRedirect(PAGE_SUCCESS_UPLOAD);
-					
+
 				}catch(ApplicationException e) {
 					
 					log("generata eccezzione: " + e.getMessaggio());
 					GestoreSessioneUploadProposta.setMessaggioErrore(request, e.getMessaggio());
-					inviaPagina(request, response, PAGE_UPLOAD_PROPOSTA);
 					
-				}	
+				}
+				inviaPagina(request, response, PAGE_UPLOAD_PROPOSTA);
 			}
 		}else {
 			mainPage(request, response);
@@ -102,6 +100,7 @@ public class UploadPropostaServlet extends HttpServlet {
 	private void avviaSessione(HttpServletRequest request) {
 		GestoreSessioneUploadProposta.setCasoDUso(request, SERVLET);
 		GestoreSessioneUploadProposta.setMessaggioErrore(request, null);
+		GestoreSessioneUploadProposta.setPropostaCaricata(request, false);
 		UploadPropostaServletHelper.getInstance().setFormSessione(request);
 		try {
 			UploadPropostaServletHelper.getInstance().setCategorieSessione(request);

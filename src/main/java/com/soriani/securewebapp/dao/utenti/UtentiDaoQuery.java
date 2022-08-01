@@ -2,10 +2,12 @@ package com.soriani.securewebapp.dao.utenti;
 
 public interface UtentiDaoQuery {
 	
-	final String insertUtenteStatement = "INSERT INTO UTENTI(NOME, COGNOME, USERNAME, IMMAGINE_PROFILO, PASSWORD) VALUES(?, ?, ?, ?, ?) ";
+	String insertUtenteStatement = "INSERT INTO UTENTI(NOME, COGNOME, USERNAME, IMMAGINE_PROFILO, PASSWORD) VALUES(?, ?, ?, ?, ?) ";
 	
-	final String readUtenteFromUsernameStatement = "SELECT * FROM UTENTI WHERE USERNAME = ? ";
+	String readUtenteFromUsernameStatement = "SELECT * FROM UTENTI WHERE USERNAME = ? ";
 	
-	final String readPasswordFromUsernameStatemant = "SELECT PASSWORD FROM UTENTI WHERE USERNAME = ? ";
+	String readPasswordFromUsernameStatemant = "SELECT PASSWORD FROM UTENTI WHERE USERNAME = ? ";
+
+	String updatePhotoFromUsernameStatement = "UPDATE UTENTE SET IMMAGINE_PROFILO = ? WHERE USERNAME = ? ";
 
 }

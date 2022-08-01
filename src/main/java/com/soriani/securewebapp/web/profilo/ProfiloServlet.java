@@ -1,7 +1,7 @@
 package com.soriani.securewebapp.web.profilo;
 
+import com.soriani.securewebapp.utility.ApplicationException;
 import java.io.IOException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,11 +48,29 @@ public class ProfiloServlet extends HttpServlet {
 		
 		String operazione = request.getParameter("operazione");
 		if(operazione != null) {
-			
+
+			if(operazione.equals("updatePhoto")){
+
+				ProfiloServletHelper.getInstance().updatePhoto(request);
+
+			}
+
 		}else {
+			avviaSessione(request);
 			mainPage(request, response);
 		}
 		
+	}
+
+	/**
+	 * funzione che permette di settare la sessione all'avvio del caso d'uso
+	 * @param request
+	 */
+	private void avviaSessione(HttpServletRequest request) {
+
+		GestoreSessioneProfilo.setCasoDUso(request, SERVLET);
+		GestoreSessioneProfilo.setMessaggioErrore(request, null);
+
 	}
 	
 	/**
