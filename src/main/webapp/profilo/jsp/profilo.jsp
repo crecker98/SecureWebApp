@@ -1,6 +1,5 @@
 <%@ page import="com.soriani.securewebapp.web.profilo.GestoreSessioneProfilo" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-		 pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/condivisi/jsp/header.jsp"%>
 
 <div class="container-fluid">
@@ -11,10 +10,10 @@
 				<div class="card-body text-center shadow">
 					<img class="rounded-circle mb-3 mt-4"
 						src="data:image/jpg;base64,<%= Base64.getEncoder().encodeToString(utente.getImmagineProfilo()) %>" width="160" height="160">
-					<form action="<%=GestoreSessioneProfilo.getCasoDUso(request)%>" class="mb-3">
+					<form id="formFoto" method="post" action="<%=pagina%>" class="mb-3" enctype="multipart/form-data">
 						<input type="hidden" name="operazione" value="updatePhoto">
 						<label for="foto" class="btn btn-primary btn-sm">Cambia foto</label>
-						<input type="file" accept=".png,.jpeg,.jpg" hidden="" id="foto"  >
+						<input type="file" accept=".png,.jpeg,.jpg" hidden name="fotoProfilo" id="foto"  >
 					</form>
 				</div>
 			</div>

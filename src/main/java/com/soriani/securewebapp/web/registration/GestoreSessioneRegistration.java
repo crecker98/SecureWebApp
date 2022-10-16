@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.soriani.securewebapp.web.sessione.GestoreSessione;
+import com.soriani.securewebapp.web.condivisi.GestoreSessione;
 
 public class GestoreSessioneRegistration extends GestoreSessione {
 	

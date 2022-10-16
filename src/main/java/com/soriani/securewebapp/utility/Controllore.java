@@ -120,6 +120,7 @@ public final class Controllore {
 				exception.setMessaggio("Estensione del file non ammessa");
 				throw exception;
 			}
+			break;
 		}
 
 		try{

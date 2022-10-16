@@ -37,6 +37,45 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 
 	}
 
+	/**
+	 * meotodo che consente l'update delle informazioni dell'utente loggato tranne password
+	 * @param newUtente
+	 * @throws ApplicationException
+	 * @throws SQLException
+	 */
+	public void updateInfoUtente(Utente newUtente, String oldUsername) throws ApplicationException, SQLException {
+
+		Connection connection = null;
+		ResultSet resultSet = null;
+		PreparedStatement ps = null;
+
+		try {
+
+			connection = getConnection(TABLE, UPDATE);
+			ps = connection.prepareStatement(updateInfoFromUsernameStatement);
+			int i = 1;
+			ps.setString(i++, newUtente.getUsername());
+			ps.setString(i++, newUtente.getNome());
+			ps.setString(i++, newUtente.getCognome());
+			ps.setString(i, oldUsername);
+			ps.executeUpdate();
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			closeConnection(resultSet, ps, connection);
+		}
+
+	}
+
+	/**
+	 * metodo che consente di aggiornare la foto dell'utente loggato
+	 * @param newPhoto
+	 * @param username
+	 * @throws ApplicationException
+	 * @throws SQLException
+	 */
 	public void updatePhoto(byte[] newPhoto, String username) throws ApplicationException, SQLException {
 
 		Connection connection = null;
@@ -62,7 +101,7 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 	}
 	
 	/**
-	 * meotodo che ricerca l'utente per username, ritorna tr
+	 * meotodo che ricerca l'utente per username
 	 * @param username
 	 * @return
 	 * @throws ApplicationException
@@ -80,8 +119,7 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 			ps = connection.prepareStatement(readUtenteFromUsernameStatement);
 			ps.setString(1, username);
 			resultSet = ps.executeQuery();
-			boolean trovato = resultSet.next();
-			return trovato;
+			return resultSet.next();
 			
 		}catch(SQLException e) {
 			e.printStackTrace();

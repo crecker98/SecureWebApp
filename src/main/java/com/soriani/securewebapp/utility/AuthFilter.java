@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 import com.soriani.securewebapp.business.Utente;
 import com.soriani.securewebapp.dao.cookie.CookieDao;
 import com.soriani.securewebapp.dao.utenti.UtentiDao;
-import com.soriani.securewebapp.web.sessione.GestoreSessione;
+import com.soriani.securewebapp.web.condivisi.GestoreSessione;
 
 @WebFilter(filterName="AuthFilter", urlPatterns = "/*")
 public class AuthFilter implements Filter {

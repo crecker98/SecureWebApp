@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.soriani.securewebapp.web.sessione.GestoreSessione" %>
+<%@ page import="com.soriani.securewebapp.web.condivisi.GestoreSessione" %>
 <%@ page import="com.soriani.securewebapp.business.Utente" %>
 <%@ page import="java.util.Base64" %>
 

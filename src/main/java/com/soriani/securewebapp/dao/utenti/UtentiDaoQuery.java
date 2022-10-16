@@ -8,6 +8,8 @@ public interface UtentiDaoQuery {
 	
 	String readPasswordFromUsernameStatemant = "SELECT PASSWORD FROM UTENTI WHERE USERNAME = ? ";
 
-	String updatePhotoFromUsernameStatement = "UPDATE UTENTE SET IMMAGINE_PROFILO = ? WHERE USERNAME = ? ";
+	String updatePhotoFromUsernameStatement = "UPDATE UTENTI SET IMMAGINE_PROFILO = ? WHERE USERNAME = ? ";
+
+	String updateInfoFromUsernameStatement = "UPDATE UTENTE SET USERNAME = ?, NOME = ?, COGNOME = ? WHERE USERNAME = ? ";
 
 }

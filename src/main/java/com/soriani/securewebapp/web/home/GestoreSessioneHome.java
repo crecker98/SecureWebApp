@@ -1,7 +1,7 @@
 package com.soriani.securewebapp.web.home;
 
 import com.soriani.securewebapp.business.PropostaProgettuale;
-import com.soriani.securewebapp.web.sessione.GestoreSessione;
+import com.soriani.securewebapp.web.condivisi.GestoreSessione;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;

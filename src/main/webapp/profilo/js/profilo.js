@@ -3,6 +3,11 @@
  */
 
 $(document).ready(function(){
+
+    $('#foto').on('change', function (){
+        $('#formFoto').submit();
+    });
+
     $('.myPassword').keyup(function() {
 
         var progressBar = $('#progressFirst');

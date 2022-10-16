@@ -1,4 +1,4 @@
-package com.soriani.securewebapp.web.sessione;
+package com.soriani.securewebapp.web.condivisi;
 
 import javax.servlet.http.HttpServletRequest;
 

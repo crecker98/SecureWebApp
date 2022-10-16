@@ -5,6 +5,7 @@
 <%@ page import="java.util.ArrayList" %>
 
 <%
+
 ArrayList<Categoria> categorie = GestoreSessioneUploadProposta.getCategorie(request);
 HashMap<String, String> form = GestoreSessioneUploadProposta.getFormUpload(request);
 
@@ -46,7 +47,7 @@ HashMap<String, String> form = GestoreSessioneUploadProposta.getFormUpload(reque
                             	</div>
                             </div>
                             <%} %>
-							<form action="<%= GestoreSessioneUploadProposta.getCasoDUso(request)%>" method="post" enctype="multipart/form-data">
+							<form action="<%=pagina%>" method="post" enctype="multipart/form-data">
 								<input type="hidden" name="operazione" value="insertProposta">
 								<div class="row">
 									<div class="col">

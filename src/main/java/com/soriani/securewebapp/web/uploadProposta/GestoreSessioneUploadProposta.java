@@ -6,7 +6,7 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 
 import com.soriani.securewebapp.business.Categoria;
-import com.soriani.securewebapp.web.sessione.GestoreSessione;
+import com.soriani.securewebapp.web.condivisi.GestoreSessione;
 
 public class GestoreSessioneUploadProposta extends GestoreSessione {
 	

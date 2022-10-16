@@ -2,8 +2,10 @@ package com.soriani.securewebapp.web.profilo;
 
 import com.soriani.securewebapp.utility.ApplicationException;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,13 +15,14 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ProfiloServlet
  */
 @WebServlet(name = "Profilo", urlPatterns = "/Profilo")
+@MultipartConfig
 public class ProfiloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * costante col nome della servlet
 	 */
-    private static final String SERVLET = "/Profilo";
+    private static final String SERVLET = "Profilo";
     
     /**
      * costante per la main page della servlet
@@ -47,14 +50,25 @@ public class ProfiloServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String operazione = request.getParameter("operazione");
+		String msg = "";
 		if(operazione != null) {
 
 			if(operazione.equals("updatePhoto")){
+				try {
+					ProfiloServletHelper.getInstance().updatePhoto(request);
+					msg = "Modifica della foto riuscita correttamente";
+				} catch (ApplicationException e) {
+					throw new RuntimeException(e);
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				}
+			}else if(operazione.equals("updateInfo")) {
 
-				ProfiloServletHelper.getInstance().updatePhoto(request);
 
 			}
 
+			GestoreSessioneProfilo.setMessaggioRiuscita(request, msg);
+			inviaPagina(request, response, PAGE_PROFILO);
 		}else {
 			avviaSessione(request);
 			mainPage(request, response);
@@ -83,11 +97,23 @@ public class ProfiloServlet extends HttpServlet {
 	private static void mainPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String task = request.getRequestURI().substring(request.getContextPath().length());
-		if (SERVLET.equals(task)){
+		String servlet = "/" + SERVLET;
+		if (servlet.equals(task)){
 		    RequestDispatcher dispatcher = request.getRequestDispatcher(PAGE_PROFILO);
 		    dispatcher.forward(request, response);
 		}
 		
+	}
+
+	/**
+	 * metodo per reindirizzare le pagine
+	 * @param request
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void inviaPagina(HttpServletRequest request, HttpServletResponse response, String pagina) throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher(pagina);
+		dispatcher.forward(request, response);
 	}
 
 }
