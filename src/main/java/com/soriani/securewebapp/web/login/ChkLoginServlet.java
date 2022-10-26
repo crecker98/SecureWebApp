@@ -7,7 +7,9 @@ import com.soriani.securewebapp.utility.Controllore;
 
 public class ChkLoginServlet {
 	
-private static ChkLoginServlet instance = new ChkLoginServlet();
+	private static ChkLoginServlet instance = new ChkLoginServlet();
+
+	private static final String USERNAME_REGEX = "^[a-zA-Z0-9]+$";
 	
 	private ChkLoginServlet() {
 		
@@ -26,7 +28,7 @@ private static ChkLoginServlet instance = new ChkLoginServlet();
 		
 		String username = request.getParameter("username");
 		
-		if(!Controllore.isAlfanumericString(username)) {
+		if(!Controllore.checkString(username, USERNAME_REGEX)) {
 			throw new ApplicationException("Inserire un username valido, non può contenere caratteri speciali!");
 		}
 		

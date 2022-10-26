@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.soriani.securewebapp.business.Categoria;
 import com.soriani.securewebapp.dao.condivisi.Dao;
@@ -45,8 +46,7 @@ public class CategorieDao extends Dao implements CategorieDaoQuery {
 		try {
 			
 			connection = getConnection(TABLE, SELECT);
-			String statement = readGRPCategorieStatement;
-			ps = connection.prepareStatement(statement);
+			ps = connection.prepareStatement(readCategorieStatement);
 			resultSet = ps.executeQuery();
 			if(!resultSet.next()) {
 				throw new ApplicationException("Categorie non disponibili");
@@ -70,5 +70,40 @@ public class CategorieDao extends Dao implements CategorieDaoQuery {
 		}
 		
 	}
+
+	public HashMap<String, Double> getAvgCategoriesFromUsername(String username) throws ApplicationException, SQLException {
+
+		Connection connection = null;
+		ResultSet resultSet = null;
+		PreparedStatement ps = null;
+
+		try {
+
+			connection = getConnection(TABLE, SELECT);
+			ps = connection.prepareStatement(readCategoriesGroupBy);
+			ps.setString(1, username);
+			resultSet = ps.executeQuery();
+			if(!resultSet.next()) {
+				throw new ApplicationException("Categorie non disponibili");
+			}
+
+			HashMap<String, Double> categorie = new HashMap<>();
+			do {
+
+				categorie.put(resultSet.getString("CATEGORIA"), resultSet.getDouble("AVG"));
+
+			}while(resultSet.next());
+
+			return categorie;
+
+		} catch(SQLException | ApplicationException e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			closeConnection(resultSet, ps, connection);
+		}
+
+	}
+
 
 }

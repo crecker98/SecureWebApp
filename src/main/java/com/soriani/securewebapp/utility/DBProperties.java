@@ -1,9 +1,11 @@
 package com.soriani.securewebapp.utility;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Properties;
 
 public final class DBProperties implements Serializable {
@@ -69,23 +71,23 @@ public final class DBProperties implements Serializable {
 		//leggo i parametri dal file di configurazione
 		Properties properties = new Properties();
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();           
-		String path = classLoader.getResource("/").getPath() + CONFIG_PATH;
-		properties.load(new FileInputStream(path));
+		String path = Objects.requireNonNull(classLoader.getResource("/")).getPath() + CONFIG_PATH;
+		properties.load(Files.newInputStream(Paths.get(path)));
 		
 		this.setSource(properties.getProperty(SOURCE));
-		this.setSchema(properties.getProperty(SCHEMA));
+
 		this.setConnectionParameters(properties.getProperty(CONNECTION_PARAMETERS));
 		
 		//leggo i parametri dal file in base alla tabella e all'operazione
 		properties = new Properties();
 		classLoader = Thread.currentThread().getContextClassLoader();           
-		path = classLoader.getResource("/").getPath() + table + ".properties";
-		properties.load(new FileInputStream(path));
+		path = Objects.requireNonNull(classLoader.getResource("/")).getPath() + table + ".properties";
+		properties.load(Files.newInputStream(Paths.get(path)));
 		
 		this.setUser(properties.getProperty(operazione  + USER));
 		this.setPassword(properties.getProperty(operazione + PASSWORD));
+		this.setSchema(properties.getProperty(SCHEMA));
 	
 	}
-	
-	
+
 }

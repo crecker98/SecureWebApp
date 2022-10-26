@@ -20,6 +20,7 @@ username = username != null ? username : "";
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4">Benvenuto in SecureWebApp!</h4>
                                     </div>
+                                    <div class="row mb-3" id="erroreMsg"></div>
                                     <%if(GestoreSessioneLogin.getMessaggioErrore(request) != null){ %>
                             		<div class="row">
                             			<div class="alert alert-danger col-xs-12">
@@ -30,7 +31,7 @@ username = username != null ? username : "";
                                     <form class="user" id="loginForm" method="post" action="Login">
                                     	<input type="hidden" name="operazione" value="login" />
                                         <div class="mb-3">
-                                        	<input value="<%= username %>" class="form-control form-control-user" required type="text"  aria-describedby="usernameHelp" placeholder="Inserisci l'username..." name="username">
+                                        	<input value="<%= username %>" class="form-control form-control-user" required type="text"  aria-describedby="usernameHelp" placeholder="Inserisci l'username..." id="username" name="username">
                                         </div>
                                         <div class="mb-3">
                                         	<input class="form-control form-control-user" required type="password" id="exampleInputPassword" placeholder="Password" name="password">
@@ -48,6 +49,10 @@ username = username != null ? username : "";
                                         <a href="<%=pagina%>?operazione=registration" style="text-decoration:none" >
                                         	<button class="btn btn-primary btn-google d-block btn-user w-100" type="button" >Registrati subito !</button>
                                         </a>
+                                        <hr>
+                                        <a href="<%=pagina%>?operazione=home" style="text-decoration:none" >
+                                            <i class="fa fa-arrow-left"></i> Torna alla home
+                                        </a>
                                     </form>
                                 </div>
                             </div>
@@ -59,7 +64,8 @@ username = username != null ? username : "";
     </div>
     
    	<%@ include file="/condivisi/jsp/tagInf.jsp" %>
-   	
+    <script src="condivisi/js/checkField.js"></script>
+   	<script src="login/js/login.js"></script>
 </body>
 
 </html>

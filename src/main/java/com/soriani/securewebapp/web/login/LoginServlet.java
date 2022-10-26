@@ -16,6 +16,7 @@ import com.soriani.securewebapp.utility.ApplicationException;
  */
 @WebServlet(name = "Login", urlPatterns = "/Login")
 public class LoginServlet extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -62,7 +63,9 @@ public class LoginServlet extends HttpServlet {
 		if(operazione != null) {
 			if(operazione.equals("registration")) {
 				response.sendRedirect(SERVLET_REGISTRATION);
-			} else if(operazione.equals("login")) {
+			}else if(operazione.equals("home")) {
+				response.sendRedirect(SERVLET_HOME);
+			}  else if(operazione.equals("login")) {
 				
 				log("procedo con il login");
 				try {
@@ -78,17 +81,6 @@ public class LoginServlet extends HttpServlet {
 					inviaPagina(request, response, PAGE_LOGIN);
 				}
 				
-			} else if(operazione.equals("Logout")) {
-				
-				try {
-					LoginServletHelper.getInstance().logoutUtente(request);
-				} catch (ApplicationException e) {
-					e.printStackTrace();
-					log("generata eccezzione: " + e.getMessaggio());
-					GestoreSessioneLogin.setMessaggioErrore(request, e.getMessaggio());
-					inviaPagina(request, response, PAGE_LOGIN);
-				}
-				response.sendRedirect(SERVLET);
 			}
 		}else {
 			mainPage(request, response);

@@ -37,6 +37,38 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 
 	}
 
+
+	/**
+	 * metodo che consente l'update della password in base all'username
+	 * @param username
+	 * @throws ApplicationException
+	 * @throws SQLException
+	 */
+	public void updatePasswordUtente(String username) throws ApplicationException, SQLException, IOException {
+
+		Connection connection = null;
+		ResultSet resultSet = null;
+		PreparedStatement ps = null;
+
+		try {
+
+			connection = getConnection(TABLE, UPDATE);
+			ps = connection.prepareStatement(updatePasswordFromUsernameStatement);
+			int i = 1;
+			ps.setBytes(i++, Servizi.readBytes("password" + username + ".bin"));
+			ps.setString(i, username);
+			ps.executeUpdate();
+
+		}catch(SQLException | ApplicationException | IOException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			closeConnection(resultSet, ps, connection);
+			Servizi.deleteFile("password" + username + ".bin");
+		}
+
+	}
+
 	/**
 	 * meotodo che consente l'update delle informazioni dell'utente loggato tranne password
 	 * @param newUtente
@@ -54,6 +86,7 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 			connection = getConnection(TABLE, UPDATE);
 			ps = connection.prepareStatement(updateInfoFromUsernameStatement);
 			int i = 1;
+			ps.setString(i++, newUtente.getEmail());
 			ps.setString(i++, newUtente.getUsername());
 			ps.setString(i++, newUtente.getNome());
 			ps.setString(i++, newUtente.getCognome());
@@ -141,7 +174,6 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 	public void registraUtente(Utente utente) throws ApplicationException, SQLException, IOException {
 		
 		Connection connection = null;
-		ResultSet resultSet = null;
 		PreparedStatement ps = null;
 		
 		try {
@@ -153,18 +185,16 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 			ps.setString(i++, utente.getCognome());
 			ps.setString(i++, utente.getUsername());
 			ps.setBytes(i++, utente.getImmagineProfilo());
-			ps.setBytes(i, Servizi.readBytes("password" + utente.getUsername() + ".bin"));
-			Servizi.deleteFile("password" + utente.getUsername() + ".bin");
+			ps.setBytes(i++, Servizi.readBytes("password" + utente.getUsername() + ".bin"));
+			ps.setString(i, utente.getEmail());
 			ps.executeUpdate();
 			
-		}catch(SQLException e) {
+		}catch(SQLException | IOException e) {
 			e.printStackTrace();
 			throw e;
-		}catch(IOException e) {
-			e.printStackTrace();
-			throw e;
-		}finally {
-			closeConnection(resultSet, ps, connection);
+		} finally {
+			closeConnection(null, ps, connection);
+			Servizi.deleteFile("password" + utente.getUsername() + ".bin");
 		}
 		
 	}
@@ -224,8 +254,7 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 		try {
 			
 			connection = getConnection(TABLE, SELECT);
-			String statement = readUtenteFromUsernameStatement;
-			ps = connection.prepareStatement(statement);
+			ps = connection.prepareStatement(readUtenteFromUsernameStatement);
 			int i = 1;
 			ps.setString(i++, username);
 			resultSet = ps.executeQuery();
@@ -237,6 +266,7 @@ public class UtentiDao extends Dao implements UtentiDaoQuery {
 			utente.setNome(resultSet.getString("NOME"));
 			utente.setCognome(resultSet.getString("COGNOME"));
 			utente.setUsername(username);
+			utente.setEmail(resultSet.getString("EMAIL"));
 			utente.setImmagineProfilo(resultSet.getBytes("IMMAGINE_PROFILO"));
 			return utente;
 			

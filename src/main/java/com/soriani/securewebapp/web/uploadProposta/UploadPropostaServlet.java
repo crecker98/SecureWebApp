@@ -16,7 +16,7 @@ import com.soriani.securewebapp.utility.ApplicationException;
 /**
  * Servlet implementation class UploadPropostaServlet
  */
-@WebServlet(name = "UploadProposta", urlPatterns = "/UploadProposta")
+@WebServlet(name = "UploadProposta", urlPatterns = "/user/UploadProposta")
 @MultipartConfig
 public class UploadPropostaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -60,14 +60,14 @@ public class UploadPropostaServlet extends HttpServlet {
 					
 					UploadPropostaServletHelper.getInstance().setFormSessione(request);
 					UploadPropostaServletHelper.getInstance().insertPropostaProgettuale(request);
-
+					response.sendRedirect(SERVLET);
 				}catch(ApplicationException e) {
 					
 					log("generata eccezzione: " + e.getMessaggio());
 					GestoreSessioneUploadProposta.setMessaggioErrore(request, e.getMessaggio());
-					
+					inviaPagina(request, response,SERVLET);
 				}
-				inviaPagina(request, response, PAGE_UPLOAD_PROPOSTA);
+
 			}
 		}else {
 			mainPage(request, response);
@@ -85,7 +85,7 @@ public class UploadPropostaServlet extends HttpServlet {
 	private void mainPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String task = request.getRequestURI().substring(request.getContextPath().length());
-		String servlet = "/" + SERVLET;
+		String servlet = "/user/" + SERVLET;
 		if (servlet.equals(task)){
 			avviaSessione(request);
 		    inviaPagina(request, response, PAGE_UPLOAD_PROPOSTA);

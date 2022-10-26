@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.soriani.securewebapp.business.Utente;
 import com.soriani.securewebapp.utility.ApplicationException;
+import com.soriani.securewebapp.utility.Servizi;
 
 /**
  * Servlet implementation class RegistrationServlet
@@ -69,8 +70,8 @@ public class RegistrationServlet extends HttpServlet {
 				
 				log("procedo con la registrazione");
 				try {
-					
-					RegistrationServletHelper.getInstance().setDatiForm(request);
+
+					GestoreSessioneRegistration.setRegistrationForm(request, Servizi.setDatiFormUtente(request));
 					Utente utente = ChkRegistration.getInstance().checkUtente(request);
 					RegistrationServletHelper.getInstance().registrationUtente(request, utente);
 					inviaPagina(request, response, PAGE_SUCCESS_REGISTRATION);
@@ -113,7 +114,7 @@ public class RegistrationServlet extends HttpServlet {
 	private void avviaSessione(HttpServletRequest request) {
 		GestoreSessioneRegistration.setCasoDUso(request, SERVLET);
 		GestoreSessioneRegistration.setMessaggioErrore(request, null);
-		RegistrationServletHelper.getInstance().setDatiForm(request);
+		GestoreSessioneRegistration.setRegistrationForm(request, Servizi.setDatiFormUtente(request));
 	}
 	
 	/**

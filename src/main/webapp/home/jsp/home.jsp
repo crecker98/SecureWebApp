@@ -33,7 +33,11 @@
                                                 <td><%= proposta.getDataAggiungta() %></td>
                                                 <td><%= proposta.getDescrizione() %></td>
                                                 <td><%= proposta.getUtente().getUsername() %></td>
-                                                <td><a download="<%= proposta.getNome() %>.txt" href="text/plain;base64,<%= Base64.getEncoder().encodeToString(proposta.getFile()) %>"></a><i class="fa fa-download"></i></td>
+                                                <td>
+                                                    <a target="_blank" href="text/plain;base64,<%= Base64.getEncoder().encodeToString(proposta.getFile()) %>">
+                                                        <i class="fa fa-download"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
                                         <%
                                             }

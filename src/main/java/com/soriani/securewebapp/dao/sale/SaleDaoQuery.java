@@ -2,8 +2,10 @@ package com.soriani.securewebapp.dao.sale;
 
 public interface SaleDaoQuery {
 	
-	final String registraSaltStatement = "INSERT INTO SALE(USERNAME, SALT) VALUES (?, ?)";
+	String registraSaltStatement = "INSERT INTO SALE(USERNAME, SALT) VALUES (?, ?)";
 	
-	final String readSaltFromUsernameStatement = "SELECT SALT FROM SALE WHERE USERNAME = ?";
+	String readSaltFromUsernameStatement = "SELECT SALT FROM SALE WHERE USERNAME = ?";
+
+	String updateSaltStatement = "UPDATE SALE SET SALT = ? WHERE USERNAME = ?";
 
 }

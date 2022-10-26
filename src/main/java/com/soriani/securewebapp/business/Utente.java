@@ -11,9 +11,15 @@ public final class Utente implements Serializable {
 	private String username;
 	private String nome;
 	private String cognome;
+	private String email;
 	private byte[] immagineProfilo;
-	
-	
+
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public String getUsername() {
 		return username;
 	}

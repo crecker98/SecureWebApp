@@ -44,7 +44,7 @@ public class CookieFilter {
 
         StringBuilder sb = new StringBuilder(cookieHeader.length());
 
-        // Cookie name value pairs are ';' separated.
+        // CustomCookie name value pairs are ';' separated.
         // Session IDs don't use ; in the value so don't worry about quoted
         // values that contain ;
         StringTokenizer st = new StringTokenizer(cookieHeader, ";");

@@ -20,6 +20,7 @@
                             <div class="text-center">
                                 <h4 class="text-dark mb-4">Crea un account!</h4>
                             </div>
+                            <div class="row mb-3" id="erroreMsg"></div>
                             <%if(GestoreSessioneRegistration.getMessaggioErrore(request) != null){ %>
                             <div class="row">
                             	<div class="alert alert-danger col-xs-12">
@@ -27,17 +28,21 @@
                             	</div>
                             </div>
                             <%} %>
-                            <form class="user" method="post" action="<%=pagina%>" enctype="multipart/form-data">
+                            <form class="user" id="formRegistration" method="post" action="<%=pagina%>" enctype="multipart/form-data">
                             	<input type="hidden" name="operazione" value="registration" />
                                 <div class="row mb-3">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                    	<input class="form-control form-control-user" required type="text" id="nome" value="<%=form.get("nome") %>" placeholder="Nome *" name="nome">
+                                    	<input class="form-control form-control-user" required type="text" id="name" value="<%=form.get("nome") %>" placeholder="Nome *" name="nome">
                                     	<small style="padding:1rem">Inserisci il tuo nome</small>
                                     </div>
                                     <div class="col-sm-6">
-                                    	<input class="form-control form-control-user" type="text" required id="cognome" value="<%=form.get("cognome") %>" placeholder="Cognome *" name="cognome">
+                                    	<input class="form-control form-control-user" type="text" required id="surname" value="<%=form.get("cognome") %>" placeholder="Cognome *" name="cognome">
                                     	<small style="padding:1rem">Inserisci il tuo cognome</small>
                                     </div>
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control form-control-user" type="email" id="email" required value="<%=form.get("email") %>"  placeholder="Email *" name="email">
+                                    <small style="padding:1rem">Inserisci la tua mail(rispetta il formato mail@mail.it)</small>
                                 </div>
                                 <div class="mb-3">
                                 	<input class="form-control form-control-user" type="text" id="username" required value="<%=form.get("username") %>"  placeholder="Username *" name="username">
@@ -76,7 +81,7 @@
 								<div class="row">
 									<p>(*) campi obbligatori</p>
 								</div>
-                                <button class="btn btn-primary d-block btn-user w-100" type="submit">Registra Account</button>
+                                <button class="btn btn-primary d-block btn-user w-100" disabled id="registraButton" type="submit">Registra Account</button>
                                 <hr>
                                 <a href="<%= pagina %>?operazione=login" style="text-decoration:none" ><button class="btn btn-primary btn-google d-block btn-user w-100" type="button" >Hai già un account? Accedi</button></a>
                                 
@@ -94,7 +99,7 @@
     
     
     <%@ include file="/condivisi/jsp/tagInf.jsp" %>
-    
+    <script src="condivisi/js/checkField.js"></script>
     <script src="registration/js/registration.js"></script>
     
 </body>

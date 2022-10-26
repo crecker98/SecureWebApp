@@ -1,14 +1,16 @@
 package com.soriani.securewebapp.business;
 
+import java.io.Serializable;
+
 /**
  * @author Christian Soriani
  */
-public final class Categoria{
+public final class Categoria implements Serializable {
 
-	public Categoria(){
-
-	}
-	
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -2094568555308107344L;
 	private int codice;
 	private String descrizione;
 	

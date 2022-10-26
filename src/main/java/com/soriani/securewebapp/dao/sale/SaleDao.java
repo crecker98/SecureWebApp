@@ -27,6 +27,31 @@ public class SaleDao extends Dao implements SaleDaoQuery {
 		return saleDao;
 		
 	}
+
+	public void updateSale(String username) throws ApplicationException, SQLException, IOException {
+
+		Connection connection = null;
+		ResultSet resultSet = null;
+		PreparedStatement ps = null;
+
+		try {
+
+			connection = getConnection(TABLE, UPDATE);
+			ps = connection.prepareStatement(updateSaltStatement);
+			int i = 1;
+			ps.setBytes(i++, Servizi.readBytes("salt" + username + ".bin"));
+			ps.setString(i, username);
+			ps.executeUpdate();
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			closeConnection(resultSet, ps, connection);
+			Servizi.deleteFile("salt" + username + ".bin");
+		}
+
+	}
 	
 	/**
 	 * metodo che consente di registrare il sale per l'utente(fase di registrazione)
@@ -44,11 +69,10 @@ public class SaleDao extends Dao implements SaleDaoQuery {
 		try {
 			
 			connection = getConnection(TABLE, INSERT);
-			String statement = registraSaltStatement;
-			ps = connection.prepareStatement(statement);
+			ps = connection.prepareStatement(registraSaltStatement);
 			int i = 1;
 			ps.setString(i++, username);
-			ps.setBytes(i++, Servizi.readBytes("salt" + username + ".bin"));
+			ps.setBytes(i, Servizi.readBytes("salt" + username + ".bin"));
 			ps.executeUpdate();
 			
 		}catch(SQLException e) {
@@ -56,6 +80,7 @@ public class SaleDao extends Dao implements SaleDaoQuery {
 			throw e;
 		}finally {
 			closeConnection(resultSet, ps, connection);
+			Servizi.deleteFile("salt" + username + ".bin");
 		}
 		
 	}
@@ -76,17 +101,14 @@ public class SaleDao extends Dao implements SaleDaoQuery {
 		try {
 			
 			connection = getConnection(TABLE, SELECT);
-			String statament = readSaltFromUsernameStatement;
-			ps = connection.prepareStatement(statament);
-			int i = 1;
-			ps.setString(i++, username);
+			ps = connection.prepareStatement(readSaltFromUsernameStatement);
+			ps.setString(1, username);
 			resultSet = ps.executeQuery();
 			if(!resultSet.next()) {
 				throw new ApplicationException("Username o password errati");
 			}
-			
-			byte[] salt = resultSet.getBytes("SALT");
-			return salt;
+
+			return resultSet.getBytes("SALT");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

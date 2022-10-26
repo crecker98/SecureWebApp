@@ -96,8 +96,8 @@ public class CookieExample extends HttpServlet {
                 Cookie cookie = cookies[i];
                 String cName = cookie.getName();
                 String cValue = cookie.getValue();
-                out.print("Cookie Name: " + HTMLFilter.filter(cName) + "<br>");
-                out.println("  Cookie Value: "
+                out.print("CustomCookie Name: " + HTMLFilter.filter(cName) + "<br>");
+                out.println("  CustomCookie Value: "
                             + HTMLFilter.filter(CookieFilter.filter(cName, cValue, sessionId))
                             + "<br><br>");
             }

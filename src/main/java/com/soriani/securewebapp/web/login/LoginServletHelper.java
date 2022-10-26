@@ -1,16 +1,22 @@
 package com.soriani.securewebapp.web.login;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Base64.Encoder;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.soriani.securewebapp.business.CustomCookie;
 import com.soriani.securewebapp.business.Utente;
 import com.soriani.securewebapp.dao.cookie.CookieDao;
 import com.soriani.securewebapp.dao.utenti.UtentiDao;
@@ -25,6 +31,7 @@ public class LoginServletHelper {
 	private static final int MAX_TIMEOUT = 60 * 15; //15 minuti
 	private static final int COOKIE_TIME = 60 * 60 * 24 * 30 ; //un mese
 	private static final String COOKIE_UUID = "UUID";
+	private static final String COOKIE_PATH = "/";
 	
 	private LoginServletHelper() {
 		
@@ -48,7 +55,7 @@ public class LoginServletHelper {
 			
 			if(Password.checkPassword(request.getParameter("password").getBytes(), request.getParameter("username"))) {
 				
-				if(Boolean.valueOf(request.getParameter("remember"))) {
+				if(Boolean.parseBoolean(request.getParameter("remember"))) {
 					saveCookie(request, response);
 				}
 				setUtenteSession(request);
@@ -56,20 +63,14 @@ public class LoginServletHelper {
 				throw ex;
 			}
 			
-		} catch (NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException | SQLException | IOException e) {
 			e.printStackTrace();
 			throw ex;
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			throw e;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw ex;
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw ex;
 		}
-		
+
 	}
 	
 	/**
@@ -81,10 +82,19 @@ public class LoginServletHelper {
 	void saveCookie(HttpServletRequest request, HttpServletResponse response) throws ApplicationException{
 		
 		String random = Servizi.generateUUID();
-		ApplicationException ex = new ApplicationException("Errore in fase di login. Riprovare");
-		String username = request.getParameter("username");
+		ApplicationException ex = new ApplicationException("Errore in fase salvataggio/generazione del cookie");
+		String username = GestoreSessioneLogin.getUsernameLogin(request);
 		Cookie[] cookies = request.getCookies();
-        Map<String, Cookie> cookieMap = new HashMap<>();
+		String value = username + ";" + random;
+		CustomCookie encryptedValue = null;
+		try {
+			encryptedValue = Servizi.encryptAES(value);
+		} catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+			e.printStackTrace();
+			throw ex;
+		}
+
+		Map<String, Cookie> cookieMap = new HashMap<>();
         if(cookies != null) {
         	for (Cookie cookie : cookies) {
                 cookieMap.put(cookie.getName(), cookie);
@@ -96,7 +106,7 @@ public class LoginServletHelper {
 				CookieDao.getCookieDao().deleteCookieFromUsername(username);
 			}
 			
-			CookieDao.getCookieDao().registraCookie(username, random);
+			CookieDao.getCookieDao().registraCookie(username, encryptedValue);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			throw e;
@@ -104,11 +114,10 @@ public class LoginServletHelper {
 			e.printStackTrace();
 			throw ex;
 		}
-		
-		Encoder encoder = Base64.getEncoder();
-		String value = username + ";" + random;
-		String cookieValue = encoder.encodeToString(value.getBytes());
-		Cookie cookie = new Cookie("UUID", cookieValue);
+
+		String cookieValue = Base64.getEncoder().encodeToString(encryptedValue.getValue());
+		Cookie cookie = new Cookie(COOKIE_UUID, cookieValue);
+		cookie.setPath(COOKIE_PATH);
 		cookie.setMaxAge(COOKIE_TIME);
 		response.addCookie(cookie);
 		
@@ -123,7 +132,7 @@ public class LoginServletHelper {
 		
 		ApplicationException ex = new ApplicationException("Errore in fase di login. Riprovare");
 		String username = request.getParameter("username");
-		Utente utente = new Utente();
+		Utente utente;
 		try {
 			utente = UtentiDao.getUtenteDao().getUtenteFromUsername(username);
 		} catch (ApplicationException e) {
@@ -142,29 +151,6 @@ public class LoginServletHelper {
 		
 	}
 	
-	public void logoutUtente(HttpServletRequest request) throws ApplicationException {
-		
-		HttpSession session = request.getSession(true);
-		session.invalidate();
-		Cookie[] cookies = request.getCookies();
-        Map<String, Cookie> cookieMap = new HashMap<>();
-        if(cookies != null) {
-        	for (Cookie cookie : cookies) {
-                cookieMap.put(cookie.getName(), cookie);
-             }
-        }
-        if(cookieMap.get(COOKIE_UUID) != null) {
-        	try {
-    			CookieDao.getCookieDao().deleteCookieFromUsername(GestoreSessioneLogin.getUtenteLoggato(request).getUsername());
-    		} catch (SQLException e) {
-    			e.printStackTrace();
-    			throw new ApplicationException("Errore di connesione");
-    		} catch (ApplicationException e) {
-    			e.printStackTrace();
-    			throw e;
-    		}
-        }
-		
-	}
+
 
 }

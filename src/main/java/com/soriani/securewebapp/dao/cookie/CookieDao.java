@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
+import com.soriani.securewebapp.business.CustomCookie;
 import com.soriani.securewebapp.dao.condivisi.Dao;
 import com.soriani.securewebapp.utility.ApplicationException;
 
@@ -27,33 +29,31 @@ public class CookieDao extends Dao implements CookieDaoQuery {
 	}
 	
 	/**
-	 * metodo che registra il cookie associato ad un username
+	 * metodo che registra il customCookie associato ad un username
 	 * @param username
-	 * @param random
 	 * @throws ApplicationException
 	 * @throws SQLException
 	 */
-	public void registraCookie(String username, String random) throws ApplicationException, SQLException {
+	public void registraCookie(String username, CustomCookie customCookie) throws ApplicationException, SQLException {
 		
 		Connection connection = null;
-		ResultSet resultSet = null;
 		PreparedStatement ps = null;
 		
 		try {
 			
 			connection = getConnection(TABLE,INSERT);
-			String statement = registraCookieStatement;
-			ps = connection.prepareStatement(statement);
+			ps = connection.prepareStatement(registraCookieStatement);
 			int i = 1;
 			ps.setString(i++, username);
-			ps.setBytes(i++, random.getBytes());
+			ps.setBytes(i++, customCookie.getKey());
+			ps.setBytes(i, customCookie.getValue());
 			ps.executeUpdate();
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw e;
 		}finally {
-			closeConnection(resultSet, ps, connection);
+			closeConnection(null, ps, connection);
 		}
 		
 	}
@@ -65,7 +65,7 @@ public class CookieDao extends Dao implements CookieDaoQuery {
 	 * @throws ApplicationException
 	 * @throws SQLException
 	 */
-	public String readCookieFromUsername(String username) throws ApplicationException, SQLException {
+	public ArrayList<CustomCookie> readCookies() throws ApplicationException, SQLException {
 		
 		Connection connection = null;
 		ResultSet resultSet = null;
@@ -74,17 +74,21 @@ public class CookieDao extends Dao implements CookieDaoQuery {
 		try {
 			
 			connection = getConnection(TABLE, SELECT);
-			String statement = readCookieStatement;
-			ps = connection.prepareStatement(statement);
-			int i = 1;
-			ps.setString(i++, username);
+			ps = connection.prepareStatement(readCookieStatement);
 			resultSet = ps.executeQuery();
 			if(!resultSet.next()) {
 				throw new ApplicationException("Username o password errati");
 			}
-			
-			String cookie = resultSet.getBytes("VALUES").toString();
-			return cookie;
+
+			ArrayList<CustomCookie> list = new ArrayList<>();
+			do{
+				CustomCookie customCookie = new CustomCookie();
+				customCookie.setKey(resultSet.getBytes("KEY_COOKIE"));
+				customCookie.setValue(resultSet.getBytes("VALUE"));
+				list.add(customCookie);
+			}while (resultSet.next());
+
+			return list;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -104,10 +108,8 @@ public class CookieDao extends Dao implements CookieDaoQuery {
 		try {
 			
 			connection = getConnection(TABLE, DELETE);
-			String statement = deleteCookieStatement;
-			ps = connection.prepareStatement(statement);
-			int i = 1;
-			ps.setString(i++, username);
+			ps = connection.prepareStatement(deleteCookieStatement);
+			ps.setString(1, username);
 			ps.executeUpdate();
 			
 		}catch(SQLException e) {

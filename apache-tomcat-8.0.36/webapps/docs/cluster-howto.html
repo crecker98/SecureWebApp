@@ -125,7 +125,7 @@ should be completed:</p>
 </ul>
 <p>Load balancing can be achieved through many techniques, as seen in the
 <a href="balancer-howto.html">Load Balancing</a> chapter.</p>
-<p>Note: Remember that your session state is tracked by a cookie, so your URL must look the same from the out
+<p>Note: Remember that your session state is tracked by a customCookie, so your URL must look the same from the out
    side otherwise, a new session will be created.</p>
 <p>Note: Clustering support currently requires the JDK version 1.5 or later.</p>
 <p>The Cluster module uses the Tomcat JULI logging framework, so you can configure logging
@@ -199,7 +199,7 @@ should be completed:</p>
 <p>
     The JvmRouteBinderValve rewrites the session id to ensure that the next request will remain sticky
     (and not fall back to go to random nodes since the worker is no longer available) after a fail over.
-    The valve rewrites the JSESSIONID value in the cookie with the same name.
+    The valve rewrites the JSESSIONID value in the customCookie with the same name.
     Not having this valve in place, will make it harder to ensure stickiness in case of a failure for the mod_jk module.
 </p>
 <p>

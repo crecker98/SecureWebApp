@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.tika.exception.TikaException;
@@ -19,39 +23,20 @@ import javax.servlet.http.Part;
 public final class Controllore {
 
 	public static final String REGEX_FILE_CONTENT="(<script>|<\\/script>|\\.jsp|\\?[a-zA-Z]+=)";
-	
+
+	public static final String PWD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
+
 	/**
-	 * metodo che controllo se la stringa non contiene numeri
+	 * metodo che controllo la conformità della stringa in base alla regola che gli viene passata
 	 * @param stringa
 	 * @return
 	 */
-	public static boolean isString(String stringa) {
-		
-		boolean response = false;
-		String stringPattern = "^[a-zA-Z]+$";
+	public static boolean checkString(String stringa, String stringPattern) {
+
 		Pattern pattern = Pattern.compile(stringPattern);
 		Matcher matcher = pattern.matcher(stringa.subSequence(0, stringa.length()));
-		response = matcher.find();
-		
-		return response;
-		
-	}
-	
-	/**
-	 * metodo che controlla se la stringa è alfanumerica
-	 * @param stringa
-	 * @return
-	 */
-	public static boolean isAlfanumericString(String stringa) {
-		
-		boolean matchFound = false;
-		String patternStr = "^[a-zA-Z0-9]+$";
-		Pattern pattern = Pattern.compile(patternStr);
-		Matcher matcher = pattern.matcher(stringa.subSequence(0, stringa.length()));
-		matchFound = matcher.find();
-		
-		return matchFound;
-		
+		return matcher.find();
+
 	}
 	
 	/**
@@ -59,23 +44,49 @@ public final class Controllore {
 	 * @param pwd
 	 * @return
 	 */
-	public static boolean checkPassword(String pwd) {
+	public static void checkPassword(byte[] pwd, byte[] repeatPwd) throws ApplicationException {
 		
-		short score = 0;
-		if(pwd.length() >= 8) {
+		boolean ok = false;
+		boolean okRepeat = false;
+		CharBuffer pw = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(pwd));
+		CharBuffer repeatPw = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(repeatPwd));
+		ApplicationException ex = new ApplicationException();
 
-			if(Pattern.compile("[A-Z]").matcher(pwd).find()) {
-				score++;
-			}
-			if(Pattern.compile("\\d").matcher(pwd).find()) {
-				score++;
-			}
-			if(Pattern.compile("[$@$!%*#?&]").matcher(pwd).find()) {
-				score++;
-			}
+		if(!pw.equals(repeatPw)) {
+			ex.setMessaggio("Le password non coincidono");
+			throw ex;
 		}
-		return score >= 3;
-		
+
+		if(pw.length() >= 8 && repeatPw.length() >= 8) {
+
+			Pattern pattern = Pattern.compile(PWD_REGEX);
+			Matcher matcher = pattern.matcher(pw);
+			ok =  matcher.find();
+
+			matcher = pattern.matcher(repeatPw);
+			okRepeat = matcher.find();
+
+		}else {
+			ex.setMessaggio("Le password non rispettano la lunghezza minima di 8 caratteri");
+			throw ex;
+		}
+
+		Arrays.fill(pw.array(), ' ');
+		Arrays.fill(repeatPw.array(), ' ');
+
+		if(!ok) {
+			ex.setMessaggio("Password non conferme ai criteri di approvazione");
+			throw ex;
+		}
+
+		if(!okRepeat) {
+			ex.setMessaggio("Ripeti Password non conferme ai criteri di approvazione");
+			throw ex;
+		}
+
+		Servizi.clearArray(pwd);
+		Servizi.clearArray(repeatPwd);
+
 	}
 
 	/**
@@ -100,15 +111,7 @@ public final class Controllore {
 			parser.parse(content, new BodyContentHandler(), metadata, new org.apache.tika.parser.ParseContext());
 			content.close();
 
-		}catch (IOException e) {
-			e.printStackTrace();
-			exception.setMessaggio("Errore nell'elaborazione del file");
-			throw exception;
-		} catch (SAXException e) {
-			e.printStackTrace();
-			exception.setMessaggio("Errore nell'elaborazione del file");
-			throw exception;
-		} catch (TikaException e) {
+		}catch (IOException | SAXException | TikaException e) {
 			e.printStackTrace();
 			exception.setMessaggio("Errore nell'elaborazione del file");
 			throw exception;

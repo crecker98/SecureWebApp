@@ -1,12 +1,17 @@
 package com.soriani.securewebapp.utility;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -20,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.soriani.securewebapp.business.CustomCookie;
 import com.soriani.securewebapp.business.Utente;
 import com.soriani.securewebapp.dao.cookie.CookieDao;
 import com.soriani.securewebapp.dao.utenti.UtentiDao;
@@ -48,7 +54,6 @@ public class AuthFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		
 		HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
@@ -58,7 +63,7 @@ public class AuthFilter implements Filter {
         boolean registrationRequest = req.getRequestURI().equals(APP + REGISTRATION_SERVLET);
         boolean isStaticResource = req.getRequestURI().startsWith(ASSETS);
         boolean isStaticResourceJS = req.getRequestURI().endsWith(JS_RESOURCE);
-        boolean homeRequest = req.getRequestURI().equals(APP + "/");
+        boolean homeRequest = req.getRequestURI().equals(APP + "/") || req.getRequestURI().equals(APP + "/Home");
         
         Cookie[] cookies = req.getCookies();
         Map<String, Cookie> cookieMap = new HashMap<>();
@@ -68,9 +73,9 @@ public class AuthFilter implements Filter {
              }
         }
 
-        if(loggedIn || loginRequest || isStaticResource || registrationRequest || isStaticResourceJS) { //se sono loggato, se sto andando sul login, se sto andando su registrazione o se richiamo le risorse statiche(ccs,js,html)
+        if(homeRequest || loggedIn || loginRequest || registrationRequest || isStaticResource || isStaticResourceJS) { //se sono loggato, se sto andando sul login, se sto andando su registrazione o se richiamo le risorse statiche(ccs,js,html)
         	
-        	if(loggedIn && cookieMap.get(COOKIE_UUID) != null) { // se sono loggato e ho i cookie memorizzati 
+        	if(loggedIn && cookieMap.get(COOKIE_UUID) != null ) { // se sono loggato e ho i cookie memorizzati
         		
         		if(loginRequest || registrationRequest) { //reindirizzo le chiamate al login o registration alla home in quanto utente è già loggato
         			res.sendRedirect(req.getContextPath() + HOME_SERVLET);
@@ -79,49 +84,35 @@ public class AuthFilter implements Filter {
  
         	}
         	
-        	if(cookieMap.get(COOKIE_UUID) != null && !loggedIn) { //se ho il cookie ma non ho sessione attiva, la creo partendo dal cookie (ho spinto su ricordami in precedenza)
+        	if(cookieMap.get(COOKIE_UUID) != null && !cookieMap.get(COOKIE_UUID).getValue().equals("") && !loggedIn ) { //se ho il cookie ma non ho sessione attiva, la creo partendo dal cookie (ho spinto su ricordami in precedenza)
         		
         		try {
-    				
+
     				byte[] cookieBro = Base64.getDecoder().decode(cookieMap.get(COOKIE_UUID).getValue());
-    				String cookieBrowser = new String(cookieBro, StandardCharsets.UTF_8);
-    				cookieBrowser = cookieBrowser.split(";")[1];
-    	        	String cookieDB = CookieDao.getCookieDao().readCookieFromUsername(req.getParameter("username"));
-    				if(cookieBrowser.equals(cookieDB)) {
-    	        		Utente utente = UtentiDao.getUtenteDao().getUtenteFromUsername(req.getParameter("username"));
-    	        		GestoreSessione.setUtenteLoggato(req, utente);
-    	        		res.sendRedirect(req.getContextPath() + HOME_SERVLET);
-    	        		return;
-    	        	}else {
-    	        		res.sendRedirect(req.getContextPath() + LOGIN_SERVLET);
-    	        		return;
-    	        	}
-    				
-    			} catch (ApplicationException e) {
-    				e.printStackTrace();
-    				res.sendRedirect(req.getContextPath() + LOGIN_SERVLET);
-    				if (cookies != null)
-    			        for (Cookie cookie : cookies) {
-    			            cookie.setValue("");
-    			            cookie.setPath("/");
-    			            cookie.setMaxAge(-1);
-    			            res.addCookie(cookie);
-    			    }
-    				return;
-    			} catch (SQLException e) {
-    				e.printStackTrace();
-    				res.sendRedirect(req.getContextPath() + LOGIN_SERVLET);
-    				if (cookies != null)
-    			        for (Cookie cookie : cookies) {
-    			            cookie.setValue("");
-    			            cookie.setPath("/");
-    			            cookie.setMaxAge(-1);
-    			            res.addCookie(cookie);
-    			        }
-    				return;
+					ArrayList<CustomCookie> listCookieDB = CookieDao.getCookieDao().readCookies();
+					for(CustomCookie cookieDB : listCookieDB) {
+						String cookieDataBase = Servizi.decryptAES(cookieDB);
+						CustomCookie customCookie = new CustomCookie();
+						customCookie.setKey(cookieDB.getKey());
+						customCookie.setValue(cookieBro);
+						String cookieSaveBrowser = Servizi.decryptAES(cookieDB);
+						if(cookieDataBase.equals(cookieSaveBrowser)) {
+							Utente utente = UtentiDao.getUtenteDao().getUtenteFromUsername(cookieSaveBrowser.split(";")[0]);
+							GestoreSessione.setUtenteLoggato(req, utente);
+							res.sendRedirect(req.getContextPath() + HOME_SERVLET);
+							return;
+						}else {
+							res.sendRedirect(req.getContextPath() + LOGIN_SERVLET);
+							return;
+						}
+					}
+    			} catch (ApplicationException | SQLException | IllegalBlockSizeException | NoSuchAlgorithmException |
+						 BadPaddingException | InvalidKeyException | NoSuchPaddingException e) {
+					deleteSession(req, res, e, cookies);
+					return;
     			}
-        		
-        	}
+
+			}
         	
         	if(cookieMap.get(COOKIE_UUID) == null && loggedIn) { // se non ho chiesto di essere ricordato, ma sono loggato con sessione attiva devo controllare solo se faccio richieste a login o registration
         		
@@ -132,20 +123,36 @@ public class AuthFilter implements Filter {
         		
         	}
         	
-        	if(loggedIn && (loginRequest || registrationRequest || homeRequest) ) {
+        	if(loggedIn && (loginRequest || registrationRequest ) ) {
         		res.sendRedirect(req.getContextPath() + HOME_SERVLET);
         		return;
         	}
-        	
+
         	chain.doFilter(request, response);
         	
         }else {
+
+			res.sendRedirect(req.getContextPath() + HOME_SERVLET);
+        	return;
+
+        }
         	
-        	res.sendRedirect(req.getContextPath() + LOGIN_SERVLET);
-        	return;	
-        	
-        } 
-        	
+	}
+
+	private void deleteSession(HttpServletRequest req, HttpServletResponse res, Exception e, Cookie[] cookies) throws IOException {
+
+		e.printStackTrace();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				cookie.setValue("");
+				cookie.setPath("/");
+				cookie.setMaxAge(-1);
+				res.addCookie(cookie);
+			}
+		}
+		res.sendRedirect(req.getContextPath() + LOGIN_SERVLET);
+
+
 	}
 
 	@Override

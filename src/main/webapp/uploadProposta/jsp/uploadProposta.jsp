@@ -40,6 +40,7 @@ HashMap<String, String> form = GestoreSessioneUploadProposta.getFormUpload(reque
 							<p class="text-primary m-0 fw-bold">Proposta</p>
 						</div>
 						<div class="card-body">
+							<div class="row mb-3" id="erroreMsg"></div>
 							<%if(GestoreSessioneUploadProposta.getMessaggioErrore(request) != null){ %>
 							<div class="row">
                             	<div class="alert alert-danger col">
@@ -47,13 +48,13 @@ HashMap<String, String> form = GestoreSessioneUploadProposta.getFormUpload(reque
                             	</div>
                             </div>
                             <%} %>
-							<form action="<%=pagina%>" method="post" enctype="multipart/form-data">
+							<form action="<%=pagina%>" id="formProposta" method="post" enctype="multipart/form-data">
 								<input type="hidden" name="operazione" value="insertProposta">
 								<div class="row">
 									<div class="col">
 										<div class="mb-3">
 											<label class="form-label" for="nome"><strong>Nome proposta</strong></label><input
-												class="form-control" required type="text" id="nome" value="<%= form.get("NomeProposta") %>"
+												class="form-control" required type="text" id="nomeProposta" value="<%= form.get("NomeProposta") %>"
 												placeholder="Nome proposta" name="nome">
 												<small>Inserisci il nome della proposta progettuale</small>
 										</div>
@@ -76,7 +77,7 @@ HashMap<String, String> form = GestoreSessioneUploadProposta.getFormUpload(reque
 									<div class="col-4">
 										<div class="mb-3">
 											<label class="form-label" ><strong>Descrizione</strong></label>
-											<textarea class="form-control" name="descrizione" ><%= form.get("Descrizione") %></textarea>
+											<textarea class="form-control" id="descrizione" name="descrizione" ><%= form.get("Descrizione") %></textarea>
 										</div>
 									</div>
 									<div class="col-4">
@@ -97,9 +98,6 @@ HashMap<String, String> form = GestoreSessioneUploadProposta.getFormUpload(reque
 	</div>
 </div>
 
-
-
-
-
-
-	<%@ include file="/condivisi/jsp/footer.jsp"%>
+<%@ include file="/condivisi/jsp/footer.jsp"%>
+<script src="<%=request.getContextPath()%>/condivisi/js/checkField.js"></script>
+<script src="<%=request.getContextPath()%>/uploadProposta/js/uploadProposta.js"></script>

@@ -47,7 +47,7 @@
           all values for that header</li>
       <li>initParam - a Map that maps context initialization parameter
           names to their String parameter value</li>
-      <li>cookie - a Map that maps cookie names to a single Cookie object.</li>
+      <li>customCookie - a Map that maps customCookie names to a single Cookie object.</li>
     </ul>
 
     <blockquote>

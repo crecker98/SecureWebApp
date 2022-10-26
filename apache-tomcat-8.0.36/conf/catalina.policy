@@ -178,7 +178,7 @@ grant {
     permission java.util.PropertyPermission
      "org.apache.el.parser.COERCE_TO_ZERO", "read";
 
-    // The cookie code needs these.
+    // The customCookie code needs these.
     permission java.util.PropertyPermission
      "org.apache.catalina.STRICT_SERVLET_COMPLIANCE", "read";
     permission java.util.PropertyPermission

@@ -20,6 +20,8 @@ import com.soriani.securewebapp.utility.Servizi;
 
 public class ChkUploadProposta {
 
+	private static final String PROPOSTA_REGEX = "^[a-zA-Z0-9]+$";
+
 	private static final String TXT_EXTENSION = "text/plain";
 	private static ChkUploadProposta instance = new ChkUploadProposta();
 
@@ -43,13 +45,13 @@ public class ChkUploadProposta {
 		PropostaProgettuale proposta = new PropostaProgettuale();
 		ApplicationException exception = new ApplicationException();
 		
-		if(!Controllore.isAlfanumericString(form.get("NomeProposta").replaceAll("\\s+",""))) {
+		if(!Controllore.checkString(form.get("NomeProposta").replaceAll("\\s+",""), PROPOSTA_REGEX)) {
 			exception.setMessaggio("Inserire un nome proposta valido");
 			throw exception;
 		}
 		proposta.setNome(form.get("NomeProposta"));
 		
-		if(!Controllore.isAlfanumericString(form.get("Descrizione").replaceAll("\\s+",""))) {
+		if(!Controllore.checkString(form.get("Descrizione").replaceAll("\\s+",""), PROPOSTA_REGEX)) {
 			exception.setMessaggio("Inserire una descrizione valida");
 			throw exception;
 		}

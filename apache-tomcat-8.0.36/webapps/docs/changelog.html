@@ -488,7 +488,7 @@
         session. (markt)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        Storeconfig handling of alternate cookie processors. (markt/remm)
+        Storeconfig handling of alternate customCookie processors. (markt/remm)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
         Storeconfig handling for socket properties. (remm)
@@ -810,7 +810,7 @@
         parallel deployment. As a side-effect of this fix, the system property
         <code>org.apache.tomcat.util.http.ServerCookie.PRESERVE_COOKIE_HEADER</code>
         is no longer used. From this release, Tomcat will always preserve the
-        cookie header. (markt)
+        customCookie header. (markt)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
         <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=58836">58836</a>: Correctly merge query string parameters when
@@ -1495,7 +1495,7 @@
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
         <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=58845">58845</a>: Fix off-by one error in calculation of valid
-        characters in a cookie domain. Patch provided by Thorsten Ehlers.
+        characters in a customCookie domain. Patch provided by Thorsten Ehlers.
         (markt)
       </li>
     </ul>
@@ -3536,21 +3536,21 @@
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
         <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=55984">55984</a>: Using the allow separators in version 0 cookies option
-        with the legacy cookie processor should only apply to version 0 cookies.
+        with the legacy customCookie processor should only apply to version 0 cookies.
         Version 1 cookies with values that contain separators should not be
         affected and should continue to be quoted. (markt)
       </li>
       <li><img alt="Add: " class="icon" src="./images/add.gif">
-        <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=56393">56393</a>: Add support for RFC6265 cookie parsing and generation.
+        <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=56393">56393</a>: Add support for RFC6265 customCookie parsing and generation.
         This is currently disabled by default and may be enabled via the
         <strong>CookieProcessor</strong> element of a <strong>Context</strong>.
         (markt)
       </li>
       <li><img alt="Add: " class="icon" src="./images/add.gif">
         <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=56394">56394</a>: Introduce new configuration element CookieProcessor in
-        Context to allow context-specific configuration of cookie processing
+        Context to allow context-specific configuration of customCookie processing
         options. Attributes of Context element that were added in Tomcat 8.0.13
-        to allow configuration of a new experimental RFC6265 based cookie parser
+        to allow configuration of a new experimental RFC6265 based customCookie parser
         (<code>useRfc6265</code> and <code>cookieEncoding</code>) are
         replaced by this new configuration element. (markt)
       </li>
@@ -3569,14 +3569,14 @@
         remove sessions from the store when persisting them. (markt)
       </li>
       <li><img alt="Add: " class="icon" src="./images/add.gif">
-        Deprecate the use of system properties to control cookie parsing and
+        Deprecate the use of system properties to control customCookie parsing and
         replace them with attributes on the new <code>CookieProcessor</code>
         that may be configured on a per context basis. (markt)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        Correct an edge case and allow a cookie if the value starts with an
+        Correct an edge case and allow a customCookie if the value starts with an
         equals character and the <code>CookieProcessor</code> is not configured
-        to allow equals characters in cookie values but is configured to allow
+        to allow equals characters in customCookie values but is configured to allow
         name only cookies. (markt)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
@@ -3899,18 +3899,18 @@
     <ul class="changelog">
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
         <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=55917">55917</a>: Allow bytes in the range 0x80 to 0xFF to appear in
-        cookie values if the cookie is a V1 (RFC2109) cookie and the value is
-        correctly quoted. The new RFC6265 based cookie parser must be enabled to
+        customCookie values if the customCookie is a V1 (RFC2109) customCookie and the value is
+        correctly quoted. The new RFC6265 based customCookie parser must be enabled to
         correctly handle these cookies. (markt)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
         <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=55918">55918</a>: Do not permit control characters to appear in quoted
-        V1 (RFC2109) cookie values. The new RFC6265 based cookie parser must be
+        V1 (RFC2109) customCookie values. The new RFC6265 based customCookie parser must be
         enabled to correctly handle these cookies. (markt)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=55921">55921</a>: Correctly handle (ignore the cookie) unescaped JSON in
-        a cookie value. The new RFC6265 based cookie parser must be enabled to
+        <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=55921">55921</a>: Correctly handle (ignore the customCookie) unescaped JSON in
+        a customCookie value. The new RFC6265 based customCookie parser must be enabled to
         correctly handle these cookies. (markt)
       </li>
       <li><img alt="Add: " class="icon" src="./images/add.gif">
@@ -3938,7 +3938,7 @@
         based on a patch by Felix Schumacher. (markt)
       </li>
       <li><img alt="Add: " class="icon" src="./images/add.gif">
-        Add an additional implementation of a RFC6265 based cookie parser along
+        Add an additional implementation of a RFC6265 based customCookie parser along
         with new Context options to select and configure it. This parser is
         currently considered experimental and is not used by default. (markt)
       </li>
@@ -4463,8 +4463,8 @@
         Add configuration fields for header names in SSLValve. (remm)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=56666">56666</a>: When clearing the SSO cookie use the same values for
-        domain, path, httpOnly and secure as were used to set the SSO cookie.
+        <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=56666">56666</a>: When clearing the SSO customCookie use the same values for
+        domain, path, httpOnly and secure as were used to set the SSO customCookie.
         (markt)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
@@ -4541,7 +4541,7 @@
   <div class="subsection"><h4 id="Tomcat_8.0.10_(markt)/Web_applications">Web applications</h4><div class="text">
     <ul class="changelog">
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        Attempt to obfuscate session cookie values associated with other web
+        Attempt to obfuscate session customCookie values associated with other web
         applications when viewing HTTP request headers with the Cookies example
         from the examples web application. This reduces the opportunity to use
         this example for malicious purposes should the advice to remove the
@@ -4606,7 +4606,7 @@
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
         <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=55975">55975</a>: Apply consistent escaping for double quote and
-        backslash characters when escaping cookie values. (markt)
+        backslash characters when escaping customCookie values. (markt)
       </li>
       <li><img alt="Code: " class="icon" src="./images/code.gif">
         <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=56387">56387</a>: Improve the code that handles an attempt to load a
@@ -4645,22 +4645,22 @@
         (markt/kkolinko)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        Relax cookie naming restrictions. Cookie attribute names used in the
-        <code>Set-Cookie</code> header may be used unambiguously as cookie
+        Relax customCookie naming restrictions. Cookie attribute names used in the
+        <code>Set-Cookie</code> header may be used unambiguously as customCookie
         names. The restriction that prevented such usage has been removed.
         (jboynes/markt)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        Further relax cookie naming restrictions. Version 0 (a.k.a Netscape
+        Further relax customCookie naming restrictions. Version 0 (a.k.a Netscape
         format) cookies may now use names that start with the <code>$</code>
         character. (jboynes/markt)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        Restrict cookie naming so that the <code>=</code> character is no longer
-        permitted in a version 0 (a.k.a. Netscape format) cookie name. While
+        Restrict customCookie naming so that the <code>=</code> character is no longer
+        permitted in a version 0 (a.k.a. Netscape format) customCookie name. While
         Tomcat allowed this, browsers always truncated the name at the
-        <code>=</code> character leading to a mis-match between the cookie the
-        server set and the cookie returned by the browser. (jboynes/markt)
+        <code>=</code> character leading to a mis-match between the customCookie the
+        server set and the customCookie returned by the browser. (jboynes/markt)
       </li>
       <li><img alt="Add: " class="icon" src="./images/add.gif">
         Add a simple <code>ServiceLoader</code> based discovery mechanism to the
@@ -4854,7 +4854,7 @@
         ignored. (markt/kkolinko)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        Attempt to obfuscate session cookie values associated with other web
+        Attempt to obfuscate session customCookie values associated with other web
         applications when viewing HTTP request headers with the Request Header
         example from the examples web application. This reduces the opportunity
         to use this example for malicious purposes should the advice to remove
@@ -5918,9 +5918,9 @@
         Context listener to allow better EE and framework integration. (remm)
       </li>
       <li><img alt="Fix: " class="icon" src="./images/fix.gif">
-        <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=57896">57896</a>: Support defensive copying of "cookie" header so that
-        unescaping double quotes in a cookie value does not corrupt original
-        value of "cookie" header. This is an opt-in feature, enabled by
+        <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=57896">57896</a>: Support defensive copying of "customCookie" header so that
+        unescaping double quotes in a customCookie value does not corrupt original
+        value of "customCookie" header. This is an opt-in feature, enabled by
         <code>org.apache.tomcat.util.http.ServerCookie.PRESERVE_COOKIE_HEADER</code>
         system property. (remm/kkolinko)
       </li>

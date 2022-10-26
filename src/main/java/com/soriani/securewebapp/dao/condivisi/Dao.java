@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import com.soriani.securewebapp.utility.ApplicationException;
 import com.soriani.securewebapp.utility.DBProperties;
 
-public class Dao {
+public abstract class Dao {
 	
 	//COSTANTI PER PRELEVARE LA CONFIGURAZIONE DA FILE
 	protected static final String INSERT = "insert";
@@ -23,7 +23,7 @@ public class Dao {
 	 * metodo che consente di connetersi al db
 	 * @return
 	 */
-	public static final Connection getConnection(String table, String operazione) throws ApplicationException {
+	protected static Connection getConnection(String table, String operazione) throws ApplicationException {
 		
 		DBProperties dbProperties = new DBProperties();
 		try {
@@ -65,7 +65,7 @@ public class Dao {
 	 * @param ps
 	 * @param connection
 	 */
-	public static final void closeConnection(ResultSet resultSet, PreparedStatement ps, Connection connection ) {
+	protected static void closeConnection(ResultSet resultSet, PreparedStatement ps, Connection connection ) {
 		
 		if(resultSet != null) try { resultSet.close(); } catch(Exception e) {}
 		if(ps != null) try { ps.close(); } catch(Exception e) {}

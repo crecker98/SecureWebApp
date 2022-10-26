@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.soriani.securewebapp.business.Utente;
 
-public class GestoreSessione {
+public abstract class GestoreSessione {
 	
 	public static String getMessaggioErrore(HttpServletRequest request) {
 		return (String) request.getSession().getAttribute("MessaggioErrore");

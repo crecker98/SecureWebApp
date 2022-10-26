@@ -42,29 +42,10 @@ public class RegistrationServletHelper {
 			SaleDao.getSaleDao().registraSale(utente.getUsername());
 			Arrays.fill(request.getParameter("password").getBytes(), (byte) 0);
 			
-		} catch (NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException | IOException | SQLException e) {
 			e.printStackTrace();
 			throw ex;
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw ex;
-		} catch(SQLException e) {
-			throw ex; 
 		}
-		
-	}
-	
-	/**
-	 * setta il form per la registrazione
-	 * @param request
-	 */
-	public void setDatiForm(HttpServletRequest request) {
-		
-		HashMap<String, String> form = new HashMap<String, String>();
-		form.put("nome", request.getParameter("nome") != null ? request.getParameter("nome") : "" );
-		form.put("cognome", request.getParameter("cognome") != null ? request.getParameter("cognome") : "");
-		form.put("username", request.getParameter("username") != null ? request.getParameter("username") : "");
-		GestoreSessioneRegistration.setRegistrationForm(request, form);
 		
 	}
 

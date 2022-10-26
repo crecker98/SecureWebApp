@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class HomeServlet
  */
-@WebServlet(name = "Home", urlPatterns = "/Home")
+@WebServlet(name = "Home", urlPatterns = {"/Home"})
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -63,7 +63,7 @@ public class HomeServlet extends HttpServlet {
 		
 		String task = request.getRequestURI().substring(request.getContextPath().length());
 		String servlet = "/" + SERVLET;
-		if (servlet.equals(task)){
+		if (servlet.equals(task) || task.equals("/")){
 			avviaSessione(request);
 		    inviaPagina(request, response, PAGE_HOME);
 		}

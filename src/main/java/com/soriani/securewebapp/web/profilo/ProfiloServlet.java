@@ -1,6 +1,8 @@
 package com.soriani.securewebapp.web.profilo;
 
 import com.soriani.securewebapp.utility.ApplicationException;
+import com.soriani.securewebapp.utility.Servizi;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
@@ -14,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ProfiloServlet
  */
-@WebServlet(name = "Profilo", urlPatterns = "/Profilo")
+@WebServlet(name = "Profilo", urlPatterns = "/user/Profilo")
 @MultipartConfig
 public class ProfiloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -48,25 +50,34 @@ public class ProfiloServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
+		GestoreSessioneProfilo.setMessaggioErrore(request, null);
+		ProfiloServletHelper profiloServletHelper = ProfiloServletHelper.getInstance();
 		String operazione = request.getParameter("operazione");
-		String msg = "";
+		String msg = null;
 		if(operazione != null) {
 
-			if(operazione.equals("updatePhoto")){
-				try {
-					ProfiloServletHelper.getInstance().updatePhoto(request);
+			try{
+				if(operazione.equals("updatePhoto")) {
+
+					profiloServletHelper.updatePhoto(request);
 					msg = "Modifica della foto riuscita correttamente";
-				} catch (ApplicationException e) {
-					throw new RuntimeException(e);
-				} catch (SQLException e) {
-					throw new RuntimeException(e);
+
+				}else if(operazione.equals("updateInfo")) {
+
+					GestoreSessioneProfilo.setUpdateForm(request, Servizi.setDatiFormUtente(request));
+					profiloServletHelper.updateInfo(request);
+					msg = "Modifica delle informazioni personali riuscita";
+
+				}else if(operazione.equals("updatePassword")) {
+
+					profiloServletHelper.updatePassword(request);
+					msg = "Password modificata correttamente";
+
 				}
-			}else if(operazione.equals("updateInfo")) {
-
-
+			}catch (ApplicationException e) {
+				GestoreSessioneProfilo.setMessaggioErrore(request, e.getMessaggio());
 			}
-
 			GestoreSessioneProfilo.setMessaggioRiuscita(request, msg);
 			inviaPagina(request, response, PAGE_PROFILO);
 		}else {
@@ -84,6 +95,9 @@ public class ProfiloServlet extends HttpServlet {
 
 		GestoreSessioneProfilo.setCasoDUso(request, SERVLET);
 		GestoreSessioneProfilo.setMessaggioErrore(request, null);
+		GestoreSessioneProfilo.setMessaggioRiuscita(request, null);
+		GestoreSessioneProfilo.setUpdateForm(request, Servizi.setDatiFormUtente(request));
+		GestoreSessioneProfilo.setCategories(request, ProfiloServletHelper.getInstance().calculateCategories(request));
 
 	}
 	
@@ -97,7 +111,7 @@ public class ProfiloServlet extends HttpServlet {
 	private static void mainPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String task = request.getRequestURI().substring(request.getContextPath().length());
-		String servlet = "/" + SERVLET;
+		String servlet = "/user/" + SERVLET;
 		if (servlet.equals(task)){
 		    RequestDispatcher dispatcher = request.getRequestDispatcher(PAGE_PROFILO);
 		    dispatcher.forward(request, response);

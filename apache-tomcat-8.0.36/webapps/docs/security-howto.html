@@ -95,7 +95,7 @@
       <p>The examples web application should always be removed from any security
       sensitive installation. While the examples web application does not
       contain any known vulnerabilities, it is known to contain features
-      (particularly the cookie examples that display the contents of all
+      (particularly the customCookie examples that display the contents of all
       received and allow new cookies to be set) that may be used by an attacker
       in conjunction with a vulnerability in another application deployed on the
       Tomcat instance to obtain additional information that would otherwise be
@@ -479,7 +479,7 @@
     text. Web applications using these authentication mechanisms with clients
     connecting over untrusted networks should use SSL.</p>
 
-    <p>The session cookie for a session with an authenticated user are nearly
+    <p>The session customCookie for a session with an authenticated user are nearly
     as useful as the user's password to an attacker and in nearly all
     circumstances should be afforded the same level of protection as the
     password itself. This usually means authenticating over SSL and continuing
