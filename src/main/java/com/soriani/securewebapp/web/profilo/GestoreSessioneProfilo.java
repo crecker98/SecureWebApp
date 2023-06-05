@@ -5,7 +5,7 @@ import com.soriani.securewebapp.web.condivisi.GestoreSessione;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
-public class GestoreSessioneProfilo extends GestoreSessione {
+public final class GestoreSessioneProfilo extends GestoreSessione {
 
     public static void setMessaggioRiuscita(HttpServletRequest request, String msg) {
         request.getSession().setAttribute("messaggioRiuscita", msg);

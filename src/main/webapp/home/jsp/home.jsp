@@ -34,8 +34,8 @@
                                                 <td><%= proposta.getDescrizione() %></td>
                                                 <td><%= proposta.getUtente().getUsername() %></td>
                                                 <td>
-                                                    <a target="_blank" href="text/plain;base64,<%= Base64.getEncoder().encodeToString(proposta.getFile()) %>">
-                                                        <i class="fa fa-download"></i>
+                                                    <a target="_blank" href="<%=request.getContextPath()%>/Home?operazione=visualizzaProposta&codice=<%= proposta.getCodice() %>">
+                                                        <i class="fa fa-expand"></i>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -55,4 +55,5 @@
 
 
 <%@ include file="/condivisi/jsp/footer.jsp" %>
+
 <script src="home/js/home.js"></script>

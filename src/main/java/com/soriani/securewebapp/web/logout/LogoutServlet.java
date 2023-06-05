@@ -1,8 +1,6 @@
 package com.soriani.securewebapp.web.logout;
 
 import com.soriani.securewebapp.utility.ApplicationException;
-import com.soriani.securewebapp.web.login.GestoreSessioneLogin;
-import com.soriani.securewebapp.web.login.LoginServletHelper;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,7 +16,7 @@ import java.io.IOException;
  */
 
 @WebServlet(name = "Logout", urlPatterns = "/user/Logout")
-public class LogoutServlet extends HttpServlet {
+public final class LogoutServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 

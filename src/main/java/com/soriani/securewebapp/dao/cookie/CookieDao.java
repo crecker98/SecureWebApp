@@ -10,7 +10,7 @@ import com.soriani.securewebapp.business.CustomCookie;
 import com.soriani.securewebapp.dao.condivisi.Dao;
 import com.soriani.securewebapp.utility.ApplicationException;
 
-public class CookieDao extends Dao implements CookieDaoQuery {
+public final class CookieDao extends Dao implements CookieDaoQuery {
 	
 	/**
 	 * costante per connetersi al db 
@@ -60,7 +60,6 @@ public class CookieDao extends Dao implements CookieDaoQuery {
 	
 	/**
 	 * metodo che restituisce il valore del cookie in base all'username
-	 * @param username
 	 * @return
 	 * @throws ApplicationException
 	 * @throws SQLException

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class HomeServlet
  */
 @WebServlet(name = "Home", urlPatterns = {"/Home"})
-public class HomeServlet extends HttpServlet {
+public final class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -25,6 +25,8 @@ public class HomeServlet extends HttpServlet {
      * costante per il percorso della home 
      */
     private static final String PAGE_HOME = "/home/jsp/home.jsp";
+
+	private static final String PAGE_VISUALIZZA = "/home/jsp/visualizza.jsp";
 	
 	
     /**
@@ -47,9 +49,16 @@ public class HomeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HomeServletHelper.getInstance().readAllProposte(request);
-		mainPage(request, response);
-		
+		if(request.getParameter("operazione") != null && request.getParameter("operazione").equals("visualizzaProposta") && request.getParameter("codice") != null) {
+
+			GestoreSessioneHome.setCodiceProposta(request, Integer.parseInt(request.getParameter("codice")));
+			HomeServletHelper.getInstance().getProposta(request);
+			inviaPagina(request, response, PAGE_VISUALIZZA);
+		} else {
+			HomeServletHelper.getInstance().readAllProposte(request);
+			mainPage(request, response);
+		}
+
 	}
 	
 	/**

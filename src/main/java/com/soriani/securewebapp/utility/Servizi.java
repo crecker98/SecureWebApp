@@ -4,6 +4,7 @@ import com.soriani.securewebapp.business.CustomCookie;
 import com.soriani.securewebapp.business.Utente;
 import com.soriani.securewebapp.dao.utenti.UtentiDao;
 import com.soriani.securewebapp.web.condivisi.GestoreSessione;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
@@ -184,7 +185,7 @@ public final class Servizi {
 		}
 
 		Utente utenteLoggato = GestoreSessione.getUtenteLoggato(request);
-		if(utenteLoggato != null && !form.get("username").equals(utenteLoggato.getUsername())) {
+		if( (utenteLoggato != null && !form.get("username").equals(utenteLoggato.getUsername())) || request.getParameter("operazione").equals("registration") ) {
 			try {
 
 				if(UtentiDao.getUtenteDao().readUtenteFromUsername(form.get("username"))) {
@@ -192,8 +193,10 @@ public final class Servizi {
 				}
 
 			}catch(SQLException e) {
+				e.printStackTrace();
 				throw new ApplicationException("Errore di connessione!");
 			}catch(ApplicationException e1) {
+				e1.printStackTrace();
 				throw new ApplicationException(e1.getMessaggio());
 			}
 		}

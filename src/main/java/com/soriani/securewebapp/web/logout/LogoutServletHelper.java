@@ -17,17 +17,21 @@ import java.util.Map;
  * @author christiansoriani on 22/10/22
  * @project SecureWebApp
  */
-public class LogoutServletHelper {
+public final class LogoutServletHelper {
 
     private static final String COOKIE_UUID = "UUID";
 
-    private static LogoutServletHelper instance = new LogoutServletHelper();
+    private static final LogoutServletHelper instance = new LogoutServletHelper();
+
+    private static final String COOKIE_ERASE_VALUE = "";
+    private static final String COOKIE_PATH = "/";
+    private static final int COOKIE_ZERO_DURATION = -1;
 
     private LogoutServletHelper() {
 
     }
 
-    protected static LogoutServletHelper getInstance() {
+    static LogoutServletHelper getInstance() {
         return instance;
     }
 
@@ -48,9 +52,9 @@ public class LogoutServletHelper {
 
             if(cookieMap.get(COOKIE_UUID) != null) {
                 for (Cookie cookie : cookies) {
-                    cookie.setValue("");
-                    cookie.setPath("/");
-                    cookie.setMaxAge(-1);
+                    cookie.setValue(COOKIE_ERASE_VALUE);
+                    cookie.setPath(COOKIE_PATH);
+                    cookie.setMaxAge(COOKIE_ZERO_DURATION);
                     response.addCookie(cookie);
                 }
                 try {

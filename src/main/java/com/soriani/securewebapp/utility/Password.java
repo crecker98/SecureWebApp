@@ -18,19 +18,26 @@ public final class Password {
 	 * @throws NoSuchAlgorithmException
 	 * @throws IOException
 	 */
-	public static void setPassword(byte[] pwd, String username) throws NoSuchAlgorithmException, IOException{
-			
-		byte[] salt = generateSalt(12);
-		byte[] newPwd = Servizi.appendArrays(pwd, salt);
-		MessageDigest msgDigest = MessageDigest.getInstance("SHA-256");
-		byte[] hashVal = msgDigest.digest(newPwd) ;
-		Servizi.clearArray(pwd);
-		Servizi.clearArray(newPwd);
-		Servizi.saveBytes(salt, "salt" + username + ".bin");
-		Servizi.saveBytes(hashVal, "password" + username + ".bin");
-		Servizi.clearArray(salt);
-		Servizi.clearArray(hashVal);
-		
+	public static void setPassword(byte[] pwd, String username) throws IOException, ApplicationException {
+
+		byte[] salt = new byte[0];
+		byte[] newPwd = new byte[0];
+		byte[] hashVal = new byte[0];
+		try {
+			salt = generateSalt(12);
+			newPwd = Servizi.appendArrays(pwd, salt);
+			MessageDigest msgDigest = MessageDigest.getInstance("SHA-256");
+			hashVal = msgDigest.digest(newPwd) ;
+			Servizi.saveBytes(salt, "salt" + username + ".bin");
+			Servizi.saveBytes(hashVal, "password" + username + ".bin");
+		} catch (NoSuchAlgorithmException e) {
+			Servizi.clearArray(pwd);
+			Servizi.clearArray(newPwd);
+			Servizi.clearArray(salt);
+			Servizi.clearArray(hashVal);
+			throw new ApplicationException("Errore in fase di controllo password");
+		}
+
 	}
 	
 	/**
@@ -43,14 +50,22 @@ public final class Password {
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public static boolean checkPassword(byte[] pwd, String username) throws ApplicationException, SQLException, IOException, NoSuchAlgorithmException {
+	public static boolean checkPassword(byte[] pwd, String username) throws ApplicationException, SQLException, IOException {
 		
 		byte[] salt = SaleDao.getSaleDao().readSaltFromUsername(username);
 		byte[] newPwd = Servizi.appendArrays(pwd, salt);
-		MessageDigest msgDigest = MessageDigest.getInstance("SHA-256");
-		byte[] hashVal1 = msgDigest.digest(newPwd);
-		Servizi.clearArray(pwd);
-		Servizi.clearArray(newPwd);
+		byte[] hashVal1 = new byte[0];
+		MessageDigest msgDigest = null;
+		try {
+			msgDigest = MessageDigest.getInstance("SHA-256");
+			hashVal1 = msgDigest.digest(newPwd);
+		} catch (NoSuchAlgorithmException e) {
+			Servizi.clearArray(pwd);
+			Servizi.clearArray(newPwd);
+			e.printStackTrace();
+			return false;
+		}
+
 		byte[] hashVal12 = UtentiDao.getUtenteDao().readPasswordFromUsername(username);
 		boolean verificato = Arrays.equals(hashVal1, hashVal12);
 		Servizi.clearArray(hashVal1);

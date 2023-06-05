@@ -8,7 +8,7 @@ $(document).ready(function(){
             return false;
         }
 
-        if(!checkUsername($('#descrizione').val())) {
+        if(!checkDescription($('#descrizione').val())) {
             $('#erroreMsg').html("");
             $('#erroreMsg').append('<div class="row"><div class="alert alert-danger col-xs-12">Formato descrizione non valido, inserire solo lettere e numeri</div></div>');
             return false;

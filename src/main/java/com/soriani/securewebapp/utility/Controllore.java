@@ -129,6 +129,7 @@ public final class Controllore {
 		try{
 			if(!checkFileContent(file)){
 				exception.setMessaggio("Contenuto del file malevolo!");
+				throw exception;
 			}
 		} catch (IOException e){
 			e.printStackTrace();
@@ -145,8 +146,7 @@ public final class Controllore {
 	 * @return true se NON � presente codice malevolo, false altrimenti
 	 * @throws IOException
 	 */
-	private static boolean checkFileContent(Part file) throws IOException
-	{
+	private static boolean checkFileContent(Part file) throws IOException {
 		boolean validContent = true;
 		InputStream in = file.getInputStream();
 

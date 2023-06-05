@@ -12,15 +12,15 @@ import com.soriani.securewebapp.dao.categorie.CategorieDao;
 import com.soriani.securewebapp.dao.proposte.ProposteProgettualiDao;
 import com.soriani.securewebapp.utility.ApplicationException;
 
-public class UploadPropostaServletHelper {
+public final class UploadPropostaServletHelper {
 	
-	private static UploadPropostaServletHelper instance = new UploadPropostaServletHelper();
+	private static final UploadPropostaServletHelper instance = new UploadPropostaServletHelper();
 	
 	private UploadPropostaServletHelper() {
 		
 	}
 	
-	protected static UploadPropostaServletHelper getInstance() {
+	static UploadPropostaServletHelper getInstance() {
 		return instance;
 	}
 	

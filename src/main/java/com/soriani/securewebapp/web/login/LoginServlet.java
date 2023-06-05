@@ -15,7 +15,7 @@ import com.soriani.securewebapp.utility.ApplicationException;
  * Servlet implementation class LoginServlet
  */
 @WebServlet(name = "Login", urlPatterns = "/Login")
-public class LoginServlet extends HttpServlet {
+public final class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	

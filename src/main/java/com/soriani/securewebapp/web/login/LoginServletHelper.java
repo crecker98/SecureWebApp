@@ -63,12 +63,9 @@ public class LoginServletHelper {
 				throw ex;
 			}
 			
-		} catch (NoSuchAlgorithmException | SQLException | IOException e) {
+		} catch (ApplicationException | SQLException | IOException e) {
 			e.printStackTrace();
 			throw ex;
-		} catch (ApplicationException e) {
-			e.printStackTrace();
-			throw e;
 		}
 
 	}
@@ -79,7 +76,7 @@ public class LoginServletHelper {
 	 * @param response
 	 * @throws ApplicationException
 	 */
-	void saveCookie(HttpServletRequest request, HttpServletResponse response) throws ApplicationException{
+	private static void saveCookie(HttpServletRequest request, HttpServletResponse response) throws ApplicationException{
 		
 		String random = Servizi.generateUUID();
 		ApplicationException ex = new ApplicationException("Errore in fase salvataggio/generazione del cookie");
@@ -120,6 +117,9 @@ public class LoginServletHelper {
 		cookie.setPath(COOKIE_PATH);
 		cookie.setMaxAge(COOKIE_TIME);
 		response.addCookie(cookie);
+
+		Servizi.clearArray(encryptedValue.getKey());
+		Servizi.clearArray(encryptedValue.getValue());
 		
 	}
 	

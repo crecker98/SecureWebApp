@@ -23,7 +23,7 @@ import java.util.HashMap;
  * @author christiansoriani on 30/07/22
  * @project SecureWebApp
  */
-public class ChkProfilo {
+public final class ChkProfilo {
 
     //COSTANTI PER GESTIRE I TIPI DI FILE DA CARICARE
     private static final String JPEG_EXTENSION = "image/jpeg";

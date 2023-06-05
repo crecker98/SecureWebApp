@@ -10,7 +10,7 @@ import com.soriani.securewebapp.dao.condivisi.Dao;
 import com.soriani.securewebapp.utility.ApplicationException;
 import com.soriani.securewebapp.utility.Servizi;
 
-public class SaleDao extends Dao implements SaleDaoQuery {
+public final class SaleDao extends Dao implements SaleDaoQuery {
 	
 	/**
 	 * costante per connetersi al db 
@@ -28,6 +28,44 @@ public class SaleDao extends Dao implements SaleDaoQuery {
 		
 	}
 
+	/**
+	 * metodo che consente l'update dell'username nella tabella sale
+	 * @param newUsername
+	 * @param oldUsername
+	 * @throws ApplicationException
+	 * @throws SQLException
+	 */
+	public void updateUsernameSale(String newUsername, String oldUsername) throws ApplicationException, SQLException {
+
+		Connection connection = null;
+		ResultSet resultSet = null;
+		PreparedStatement ps = null;
+
+		try {
+
+			connection = getConnection(TABLE, UPDATE);
+			ps = connection.prepareStatement(updateUsernameSaltStatement);
+			int i = 1;
+			ps.setString(i++, newUsername);
+			ps.setString(i, oldUsername);
+			ps.executeUpdate();
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			closeConnection(resultSet, ps, connection);
+		}
+
+	}
+
+	/**
+	 * metodo per aggionare il sale quando viene cambiata la password
+	 * @param username
+	 * @throws ApplicationException
+	 * @throws SQLException
+	 * @throws IOException
+	 */
 	public void updateSale(String username) throws ApplicationException, SQLException, IOException {
 
 		Connection connection = null;

@@ -19,14 +19,14 @@ import com.soriani.securewebapp.utility.Controllore;
 import com.soriani.securewebapp.utility.Servizi;
 
 
-public class ChkRegistration {
+public final class ChkRegistration {
 
 	//COSTANTI PER GESTIRE I TIPI DI FILE DA CARICARE
 	private static final String JPEG_EXTENSION = "image/jpeg";
 	private static final String PNG_EXTENSION = "image/png";
 	private static final String JPG_EXTENSION = "image/jpg";
 	
-	private static ChkRegistration instance = new ChkRegistration();
+	private static final ChkRegistration instance = new ChkRegistration();
 	
 	private ChkRegistration() {
 		
@@ -68,10 +68,8 @@ public class ChkRegistration {
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new ApplicationException("Impossibile elaborare il file!");
-			} catch (ApplicationException e1){
-				throw e1;
 			}
-			
+
 		}else {
 			utente.setImmagineProfilo(null);
 		}

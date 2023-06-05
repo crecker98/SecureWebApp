@@ -5,9 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 import com.soriani.securewebapp.utility.ApplicationException;
 import com.soriani.securewebapp.utility.Controllore;
 
-public class ChkLoginServlet {
+public final class ChkLoginServlet {
 	
-	private static ChkLoginServlet instance = new ChkLoginServlet();
+	private static final ChkLoginServlet instance = new ChkLoginServlet();
 
 	private static final String USERNAME_REGEX = "^[a-zA-Z0-9]+$";
 	

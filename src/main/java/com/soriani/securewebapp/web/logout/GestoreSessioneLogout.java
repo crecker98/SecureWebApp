@@ -6,5 +6,5 @@ import com.soriani.securewebapp.web.condivisi.GestoreSessione;
  * @author christiansoriani on 22/10/22
  * @project SecureWebApp
  */
-public class GestoreSessioneLogout extends GestoreSessione {
+public final class GestoreSessioneLogout extends GestoreSessione {
 }

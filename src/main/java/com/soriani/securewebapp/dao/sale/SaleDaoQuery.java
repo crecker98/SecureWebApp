@@ -8,4 +8,6 @@ public interface SaleDaoQuery {
 
 	String updateSaltStatement = "UPDATE SALE SET SALT = ? WHERE USERNAME = ?";
 
+	String updateUsernameSaltStatement = "UPDATE SALE SET USERNAME = ? WHERE USERNAME = ?";
+
 }

@@ -1,3 +1,19 @@
+function checkDescription(string) {
+
+    var regex = /^\S.*(?:\r?\n\S.*)*$/u;
+
+    var lines = string.split('\n');
+    for(var i = 0; i < lines.length; i++)
+    {
+        if(!lines[i].match(regex)) {
+            return false;
+        }
+    }
+
+    return true;
+
+}
+
 function checkUsername(string) {
 
     var regex = new RegExp("^[a-zA-Z0-9]+$");

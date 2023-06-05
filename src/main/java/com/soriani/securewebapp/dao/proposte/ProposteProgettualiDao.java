@@ -13,7 +13,7 @@ import com.soriani.securewebapp.business.Utente;
 import com.soriani.securewebapp.dao.condivisi.Dao;
 import com.soriani.securewebapp.utility.ApplicationException;
 
-public class ProposteProgettualiDao extends Dao implements ProposteProgettualiDaoQuery {
+public final class ProposteProgettualiDao extends Dao implements ProposteProgettualiDaoQuery {
 	
 	/**
 	 * costante per connetersi al db 
@@ -129,7 +129,7 @@ public class ProposteProgettualiDao extends Dao implements ProposteProgettualiDa
 
 	}
 
-	public HashMap<String, String> getTotCategoriePropostaUtente(String username) throws ApplicationException, SQLException {
+	public byte[] getPropostaByCodice(int codice) throws SQLException, ApplicationException {
 
 		Connection connection = null;
 		ResultSet resultSet = null;
@@ -138,15 +138,14 @@ public class ProposteProgettualiDao extends Dao implements ProposteProgettualiDa
 		try{
 
 			connection = getConnection(TABLE, SELECT);
-			ps = connection.prepareStatement(selectCategoriaPropostaUtente);
+			ps = connection.prepareStatement(selectPropostaByCodice);
+			ps.setInt(1, codice);
 			resultSet = ps.executeQuery();
 			if(!resultSet.next()) {
 				throw new ApplicationException("Proposte non disponibili");
 			}
 
-			HashMap<String, String> categorie = new HashMap<String, String>();
-
-			return categorie;
+			return resultSet.getBytes("file");
 
 		}catch(SQLException e){
 			e.printStackTrace();

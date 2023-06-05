@@ -2,7 +2,7 @@
 <footer class="bg-white sticky-footer">
 	<div class="container my-auto">
 		<div class="text-center my-auto copyright">
-			<span>Copyright © SecureWebApp 2022</span>
+			<span>Copyright ï¿½ SecureWebApp 2022</span>
 		</div>
 	</div>
 </footer>
@@ -15,3 +15,13 @@
 </body>
 
 </html>
+<script>
+	var secondsBeforeExpire = ${pageContext.session.maxInactiveInterval};
+	var timeToDecide = 30; // Give client 15 seconds to choose.
+	setTimeout(function() {
+		alert('La tua sessione scadrÃ  in ' + timeToDecide + ' secondi!')
+	}, (secondsBeforeExpire - timeToDecide) * 1000);
+</script>
+<% if (request.getRequestedSessionId() != null && !request.isRequestedSessionIdValid()) { %>
+	<script>alert("Sessione scaduta necessario effettuare di nuovo il login!")</script>
+<% } %>

@@ -11,7 +11,7 @@ import com.soriani.securewebapp.dao.condivisi.Dao;
 import com.soriani.securewebapp.utility.ApplicationException;
 import com.soriani.securewebapp.utility.Servizi;
 
-public class UtentiDao extends Dao implements UtentiDaoQuery {
+public final class UtentiDao extends Dao implements UtentiDaoQuery {
 	
 	/**
 	 * costante per connetersi al db 

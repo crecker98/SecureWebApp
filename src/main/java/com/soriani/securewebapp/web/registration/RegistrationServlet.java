@@ -19,7 +19,7 @@ import com.soriani.securewebapp.utility.Servizi;
  */
 @WebServlet(name = "Registration", urlPatterns = "/Registration")
 @MultipartConfig
-public class RegistrationServlet extends HttpServlet {
+public final class RegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/**

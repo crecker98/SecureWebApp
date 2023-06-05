@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class HomeServletHelper {
+public final class HomeServletHelper {
 
-    private static HomeServletHelper instance = new HomeServletHelper();
+    private static final HomeServletHelper instance = new HomeServletHelper();
 
     private HomeServletHelper(){
 
     }
 
-    protected static HomeServletHelper getInstance(){
+    static HomeServletHelper getInstance(){
         return instance;
     }
 
@@ -32,13 +32,23 @@ public class HomeServletHelper {
         ArrayList<PropostaProgettuale> proposte = new ArrayList<>();
         try{
             proposte = ProposteProgettualiDao.getProposteDao().readAllProposte();
-        }catch(ApplicationException e){
+        }catch(ApplicationException | SQLException e){
             e.printStackTrace();
-        }catch(SQLException e1){
-            e1.printStackTrace();
         }
 
         GestoreSessioneHome.setProposte(request, proposte);
+
+    }
+
+    public void getProposta(HttpServletRequest request) {
+
+        byte[] proposta = null;
+        try {
+            proposta = ProposteProgettualiDao.getProposteDao().getPropostaByCodice(GestoreSessioneHome.getCodiceProposta(request));
+        } catch (SQLException | ApplicationException e) {
+            e.printStackTrace();
+        }
+        GestoreSessioneHome.setVisualizza(request, proposta);
 
     }
 

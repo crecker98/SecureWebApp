@@ -32,7 +32,7 @@ import com.soriani.securewebapp.dao.utenti.UtentiDao;
 import com.soriani.securewebapp.web.condivisi.GestoreSessione;
 
 @WebFilter(filterName="AuthFilter", urlPatterns = "/*")
-public class AuthFilter implements Filter {
+public final class AuthFilter implements Filter {
 	
 	//costanti per reindirizzamento
 	private static final String APP = "/SecureWebApp";
@@ -94,17 +94,18 @@ public class AuthFilter implements Filter {
 						String cookieDataBase = Servizi.decryptAES(cookieDB);
 						CustomCookie customCookie = new CustomCookie();
 						customCookie.setKey(cookieDB.getKey());
+						Servizi.clearArray(cookieDB.getKey());
 						customCookie.setValue(cookieBro);
-						String cookieSaveBrowser = Servizi.decryptAES(cookieDB);
+						String cookieSaveBrowser = Servizi.decryptAES(customCookie);
+						Servizi.clearArray(customCookie.getKey());
 						if(cookieDataBase.equals(cookieSaveBrowser)) {
 							Utente utente = UtentiDao.getUtenteDao().getUtenteFromUsername(cookieSaveBrowser.split(";")[0]);
 							GestoreSessione.setUtenteLoggato(req, utente);
 							res.sendRedirect(req.getContextPath() + HOME_SERVLET);
-							return;
 						}else {
 							res.sendRedirect(req.getContextPath() + LOGIN_SERVLET);
-							return;
 						}
+						return;
 					}
     			} catch (ApplicationException | SQLException | IllegalBlockSizeException | NoSuchAlgorithmException |
 						 BadPaddingException | InvalidKeyException | NoSuchPaddingException e) {

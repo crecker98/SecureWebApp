@@ -11,7 +11,7 @@ import com.soriani.securewebapp.business.Categoria;
 import com.soriani.securewebapp.dao.condivisi.Dao;
 import com.soriani.securewebapp.utility.ApplicationException;
 
-public class CategorieDao extends Dao implements CategorieDaoQuery {
+public final class CategorieDao extends Dao implements CategorieDaoQuery {
 	
 	/**
 	 * costante per connetersi al db 

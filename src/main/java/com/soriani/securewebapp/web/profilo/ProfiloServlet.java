@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "Profilo", urlPatterns = "/user/Profilo")
 @MultipartConfig
-public class ProfiloServlet extends HttpServlet {
+public final class ProfiloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/**

@@ -20,15 +20,15 @@ import java.util.HashMap;
  * @author christiansoriani on 30/07/22
  * @project SecureWebApp
  */
-public class ProfiloServletHelper {
+public final class ProfiloServletHelper {
 
-    private static ProfiloServletHelper instance = new ProfiloServletHelper();
+    private static final ProfiloServletHelper instance = new ProfiloServletHelper();
 
     private ProfiloServletHelper() {
 
     }
 
-    protected static ProfiloServletHelper getInstance() {
+    static ProfiloServletHelper getInstance() {
         return instance;
     }
 
@@ -63,6 +63,7 @@ public class ProfiloServletHelper {
         try {
             Utente utente = ChkProfilo.getInstance().checkUtente(request);
             UtentiDao.getUtenteDao().updateInfoUtente(utente, GestoreSessioneProfilo.getUtenteLoggato(request).getUsername());
+            SaleDao.getSaleDao().updateUsernameSale(utente.getUsername(), GestoreSessioneProfilo.getUtenteLoggato(request).getUsername());
             Utente utenteLoggato = GestoreSessioneProfilo.getUtenteLoggato(request);
             utenteLoggato.setNome(utente.getNome());
             utenteLoggato.setCognome(utente.getCognome());
@@ -91,7 +92,7 @@ public class ProfiloServletHelper {
             UtentiDao.getUtenteDao().updatePasswordUtente(username);
             SaleDao.getSaleDao().updateSale(username);
 
-        } catch (NoSuchAlgorithmException | IOException | SQLException e) {
+        } catch (ApplicationException | IOException | SQLException e) {
             e.printStackTrace();
             throw ex;
         }

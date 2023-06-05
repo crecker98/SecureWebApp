@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.soriani.securewebapp.business.Categoria;
 import com.soriani.securewebapp.web.condivisi.GestoreSessione;
 
-public class GestoreSessioneUploadProposta extends GestoreSessione {
+public final class GestoreSessioneUploadProposta extends GestoreSessione {
 	
 	public static void setCategorie(HttpServletRequest request, ArrayList<Categoria> categorie) {
 		request.getSession().setAttribute("Categorie", categorie);
@@ -34,5 +34,7 @@ public class GestoreSessioneUploadProposta extends GestoreSessione {
 	public static boolean isPropostaCaricata(HttpServletRequest request){
 		return (boolean) request.getSession().getAttribute("propostaCaricata");
 	}
+
+
 
 }

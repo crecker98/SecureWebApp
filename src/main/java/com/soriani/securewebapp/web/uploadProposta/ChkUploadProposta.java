@@ -18,12 +18,12 @@ import com.soriani.securewebapp.utility.ApplicationException;
 import com.soriani.securewebapp.utility.Controllore;
 import com.soriani.securewebapp.utility.Servizi;
 
-public class ChkUploadProposta {
+public final class ChkUploadProposta {
 
-	private static final String PROPOSTA_REGEX = "^[a-zA-Z0-9]+$";
+	private static final String PROPOSTA_REGEX = "^[a-zA-Z0-9\\.,\\s]+$";
 
 	private static final String TXT_EXTENSION = "text/plain";
-	private static ChkUploadProposta instance = new ChkUploadProposta();
+	private static final ChkUploadProposta instance = new ChkUploadProposta();
 
 	private ChkUploadProposta() {
 		
@@ -45,19 +45,19 @@ public class ChkUploadProposta {
 		PropostaProgettuale proposta = new PropostaProgettuale();
 		ApplicationException exception = new ApplicationException();
 		
-		if(!Controllore.checkString(form.get("NomeProposta").replaceAll("\\s+",""), PROPOSTA_REGEX)) {
+		if(!Controllore.checkString(form.get("NomeProposta"), PROPOSTA_REGEX)) {
 			exception.setMessaggio("Inserire un nome proposta valido");
 			throw exception;
 		}
 		proposta.setNome(form.get("NomeProposta"));
 		
-		if(!Controllore.checkString(form.get("Descrizione").replaceAll("\\s+",""), PROPOSTA_REGEX)) {
+		if(!Controllore.checkString(form.get("Descrizione"), PROPOSTA_REGEX)) {
 			exception.setMessaggio("Inserire una descrizione valida");
 			throw exception;
 		}
 		proposta.setDescrizione(form.get("Descrizione"));
 		
-		if(Integer.parseInt(form.get("Categoria").toString()) < 0 && Integer.parseInt(form.get("Categoria").toString()) > 10 ) {
+		if(Integer.parseInt(form.get("Categoria")) < 0 && Integer.parseInt(form.get("Categoria")) > 10 ) {
 			exception.setMessaggio("Inserire una categoria valida");
 			throw exception;
 		}
@@ -68,16 +68,12 @@ public class ChkUploadProposta {
 		Part filePart = null;
 		try {
 			filePart = request.getPart("file_proposta");
-		} catch (IOException e) {
-			e.printStackTrace();
-			exception.setMessaggio("Errore nel caricamento dell file");
-			throw exception;
-		} catch (ServletException e) {
+		} catch (IOException | ServletException e) {
 			e.printStackTrace();
 			exception.setMessaggio("Errore nel caricamento dell file");
 			throw exception;
 		}
-		
+
 		if(filePart.getSize() > 0) {
 
 			exception.setMessaggio("Impossibile elaborare il file!");

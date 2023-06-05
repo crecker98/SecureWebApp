@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.soriani.securewebapp.web.condivisi.GestoreSessione;
 
-public class GestoreSessioneRegistration extends GestoreSessione {
+public final class GestoreSessioneRegistration extends GestoreSessione {
 	
 	static void setRegistrationForm(HttpServletRequest request, HashMap<String,String> form) {
 		request.getSession().setAttribute("RegistrationForm", form);

@@ -28,14 +28,11 @@ public abstract class Dao {
 		DBProperties dbProperties = new DBProperties();
 		try {
 			dbProperties.getPropertiesFromFile(table, operazione);
-		} catch (FileNotFoundException e2) {
-			e2.printStackTrace();
-			throw new ApplicationException("Errore di connessione!");
 		} catch (IOException e2) {
 			e2.printStackTrace();
 			throw new ApplicationException("Errore di connessione!");
 		}
-		
+
 		Connection connessione = null;
 		
 		try { 

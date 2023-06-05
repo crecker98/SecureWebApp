@@ -18,7 +18,7 @@ import com.soriani.securewebapp.utility.ApplicationException;
  */
 @WebServlet(name = "UploadProposta", urlPatterns = "/user/UploadProposta")
 @MultipartConfig
-public class UploadPropostaServlet extends HttpServlet {
+public final class UploadPropostaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -30,6 +30,8 @@ public class UploadPropostaServlet extends HttpServlet {
      * costante per il percorso dell'upload proposta 
      */
     private static final String PAGE_UPLOAD_PROPOSTA = "/uploadProposta/jsp/uploadProposta.jsp";
+
+	private static final String PAGE_UPLOAD_PROPOSTA_SUCCESS = "/uploadProposta/jsp/success.jsp";
 
     
     /**
@@ -60,12 +62,13 @@ public class UploadPropostaServlet extends HttpServlet {
 					
 					UploadPropostaServletHelper.getInstance().setFormSessione(request);
 					UploadPropostaServletHelper.getInstance().insertPropostaProgettuale(request);
-					response.sendRedirect(SERVLET);
+					GestoreSessioneUploadProposta.setPropostaCaricata(request, true);
+					inviaPagina(request, response, PAGE_UPLOAD_PROPOSTA_SUCCESS);
 				}catch(ApplicationException e) {
 					
 					log("generata eccezzione: " + e.getMessaggio());
 					GestoreSessioneUploadProposta.setMessaggioErrore(request, e.getMessaggio());
-					inviaPagina(request, response,SERVLET);
+					inviaPagina(request, response,PAGE_UPLOAD_PROPOSTA);
 				}
 
 			}

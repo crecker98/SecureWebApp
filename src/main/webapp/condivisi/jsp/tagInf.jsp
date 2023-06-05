@@ -6,3 +6,4 @@
 <script src="<%=request.getContextPath()%>/condivisi/assets/js/theme.js"></script>
 <script src="<%=request.getContextPath()%>/condivisi/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<%=request.getContextPath()%>/condivisi/assets/js/datatables.min.js"></script>
+
